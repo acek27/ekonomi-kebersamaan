@@ -46,7 +46,7 @@
                     <th style="width: 50%; text-align: left; vertical-align: middle" >Jenis Hewan Ternak</th>
                     <th style="width: 40%; text-align: left; vertical-align: middle" >Nama</th>
                     <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -89,6 +89,35 @@
                     align: 'center'
                 },
             ]
+        });
+
+        var del = function (id) {
+            swal({
+                title: "Apakah anda yakin?",
+                text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Iya!",
+                cancelButtonText: "Tidak!",
+            }).then(
+                function (result) {
+                    $.ajax({
+                        url: "{{route('dataternak.index')}}/" + id,
+                        method: "DELETE",
+                    }).done(function (msg) {
+                        dt.ajax.reload();
+                        swal("Deleted!", "Data sudah terhapus.", "success");
+                    }).fail(function (textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                }, function (dismiss) {
+                    // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                    swal("Cancelled", "Data batal dihapus", "error");
+                });
+        };
+        $('body').on('click', '.hapus-data', function () {
+            del($(this).attr('data-id'));
         });
     });
 </script>

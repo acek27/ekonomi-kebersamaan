@@ -18,9 +18,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
-/*Peternakan*/
-Route::resource('dataternak', 'peternakan\dataTernakController');
-Route::get('dataternak', 'peternakan\dataTernakController@tabelternak')->name('tabel.ternak');
+/*peternakan*/
+Route::resource('dataternak', 'peternakan\dataternakController');
+Route::get('tabelternak', 'peternakan\dataternakController@tabelternak')->name('tabel.ternak');
 
 Route::resource('datapeternak', 'peternakan\peternakController');
 Route::get('datapeternak', 'peternakan\peternakController@tabelpeternak')->name('tabel.peternak');
