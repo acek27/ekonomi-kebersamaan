@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     <title>Dasboard SIPP</title>
 
@@ -83,29 +83,28 @@
                 </div>
             </li>
     @endcan
-    @can('pertanian')
-        <!-- Nav Item - Pertanian Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
-                   aria-expanded="true" aria-controls="collapsePertanian">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Sektor Pertanian</span>
-                </a>
-                <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
-                     data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman
-                            Pertanian</a>
-                        <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
-                        <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok
-                            Petani</a>
-                        <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
-                            Keanggotaan</a>
-                        <a class="collapse-item active" href="utilities-other.html">Data Kepemilikan Lahan</a>
-                        <a class="collapse-item active" href="utilities-other.html">Data Kebutuhan</a>
-                    </div>
-                </div>
+                        @can('pertanian')
+                            <li class=" nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePertanian"
+                           aria-expanded="true" aria-controls="collapsePertanian">
+                            <i class="fas fa-fw fa-cog"></i>
+                            <span>Sektor Pertanian</span>
+                        </a>
+                        <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Menu:</h6>
+                                <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman
+                                    Pertanian</a>
+                                <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
+                                <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok
+                                    Petani</a>
+                                <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
+                                    Keanggotaan</a>
+                                <a class="collapse-item active" href="utilities-other.html">Data Kepemilikan Lahan</a>
+                                <a class="collapse-item active" href="utilities-other.html">Data Kebutuhan</a>
+                            </div>
+                        </div>
             </li>
     @endcan
     @can('koperasi')

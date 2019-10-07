@@ -52,7 +52,7 @@
     @endif
 
 <br>
-    <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
+    <button type="submit" class="btn-sm btn-primary shadow-sm">
      SIMPAN</button>
 
 </form>

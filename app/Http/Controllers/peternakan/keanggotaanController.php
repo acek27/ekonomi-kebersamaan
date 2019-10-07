@@ -19,7 +19,7 @@ class keanggotaanController extends Controller
         return view('dashboard');
     }
 
- 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -28,8 +28,9 @@ class keanggotaanController extends Controller
     public function create()
     {
         $kelompok = DB::table('kelompokternak')->get();
+        $peternak = DB::table('peternak')->get();
         $date = date('d-m-Y');
-        return view('peternakan.keanggotaanpeternak',compact('date','kelompok'));
+        return view('peternakan.keanggotaanpeternak',compact('date','kelompok','peternak'));
     }
 
     /**
@@ -40,8 +41,8 @@ class keanggotaanController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
+
+
         return redirect('/keanggotaan/create');
     }
 

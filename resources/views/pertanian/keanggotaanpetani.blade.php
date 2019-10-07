@@ -11,7 +11,7 @@
             {!! session()->get('flash_notification.message') !!}
         </div>
     @endif
-<form method="POST" action="{{route('keaggotaapetani.store')}}" role="form">
+<form method="POST" action="{{route('keanggotaanpetani.store')}}" role="form">
     @csrf
     <label style="color:black">NIK</label>
     <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp" placeholder="">
@@ -19,23 +19,39 @@
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" disabled>
     <label style="color:black">Alamat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" disabled>
+    <label style="color:black">Lahan yang dimiliki (Ha)</label>
+    <input type="text" class="form-control form-control-user" id="lahan" name="lahan" aria-describedby="emailHelp" placeholder="">
+    <label style="color:black">LOKASI LAHAN:</label>
+    <br>
+    <label style="color:black">Desa</label>
+    <select class="form-control show-tick" name="idkelompok">
+    <option value="">-- Please select --</option>
+    @foreach($desa as $values)
+    <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
+    @endforeach
+    </select>
+    <label style="color:black">Kecamatan</label>
+    <select class="form-control show-tick" name="idkelompok">
+    <option value="">-- Please select --</option>
+    @foreach($kecamatan as $values)
+    <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
+    @endforeach
+    </select>
     <label style="color:black">Nama Kelompok</label>
     <select class="form-control show-tick" name="idkelompok">
     <option value="">-- Please select --</option>
     @foreach($kelompok as $values)
-    <option value="{{$values->idkelompokpetani}}">{{$values->namakelompok}}</option>
+    <option value="{{$values->idkelompok}}">{{$values->namakelompok}}</option>
     @endforeach
     </select>
-    <label style="color:black">Kecamatan</label>
-    <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" disabled>
     <label style="color:black">Jabatan</label>
     <select class="form-control show-tick" name="jabatan">
-    <option value="Anggota">Anggota</option>
-    <option value="Ketua">Ketua Kelompok</option>
+    <option value="anggota">Anggota</option>
+    <option value="ketua">Ketua</option>
+    <option value="sekretaris">Sekretaris</option>
+    <option value="bendahara">Bendahara</option>
     </select><label style="color:black">Tanggal Bergabung</label>
     <input type="text" value="{{$date}}" class="form-control form-control-user" id="nama" name="tgl" aria-describedby="emailHelp" disabled>
-    <label style="color:black">Lahan yang dimiliki (Ha)</label>
-    <input type="text" class="form-control form-control-user" id="lahan" name="lahan" aria-describedby="emailHelp" placeholder="">
     
    
 <br>

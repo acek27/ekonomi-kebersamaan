@@ -6,7 +6,7 @@
 @section('isi')
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Data Tanaman</h1>
+    <h1 class="h3 mb-0 text-gray-800">Data Tanaman Pertanian</h1>
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
 @if (session()->has('flash_notification.message'))
@@ -17,13 +17,13 @@
     @endif
 <form method="POST" action="{{route('datatanaman.store')}}" role="form">
     @csrf
-    <label style="color:black">Nama Tanaman</label>
-    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
     <label style="color:black">Jenis Tanaman</label>
-    <select class="form-control show-tick" name="idjenis" required>
+    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" required>
+    <label style="color:black">Kategori</label>
+    <select class="form-control show-tick" name="idkategori" required>
         <option value="">-- Please select --</option>
-        @foreach($jenis as $values)
-        <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
+        @foreach($kategori as $values)
+        <option value="{{$values->idkategori}}">{{$values->kategoritanaman}}</option>
         @endforeach
     </select>
     <br>
@@ -43,8 +43,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th style="width: 50%; text-align: left; vertical-align: middle" >Nama Tanaman</th>
-                    <th style="width: 40%; text-align: left; vertical-align: middle" >Jenis</th>
+                    <th style="width: 50%; text-align: left; vertical-align: middle" >Jenis Tanaman</th>
+                    <th style="width: 40%; text-align: left; vertical-align: middle" >Kategori</th>
                     <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
                     
                 </tr>
@@ -70,16 +70,16 @@
             serverSide: true,
             ajax: '{{route('tabel.tanaman')}}',
             columns: [{
-                    data: 'idtanaman',
-                    name: 'idtanaman'
+                    data: 'idjenis',
+                    name: 'idjenis'
                 },
                 {
-                    data: 'namatanaman',
-                    name: 'namatanaman'
+                    data: 'jenistanaman',
+                    name: 'jenistanaman'
                 },
                 {
-                    data: 'namajenis',
-                    name: 'namajenis'
+                    data: 'namakategori',
+                    name: 'namakategori'
                 },
                 {
                     data: 'action',

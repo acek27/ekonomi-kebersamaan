@@ -26,7 +26,7 @@ class kepemilikanController extends Controller
         return DataTables::of(DB::table('kepemilikan')
             ->join('peternak', 'kepemilikan.idpeternak', '=', 'peternak.idpeternak')
             ->join('jenisternak', 'kepemilikan.idjenis', '=', 'jenisternak.idjenis')
-            ->select('kepemilikan.*','peternak.nama as namapeternak', 'peternak.alamat as alamatpeternak', 'jenisternak.jenisternak as jenis')
+            ->select('kepemilikan.*', 'peternak.nama as namapeternak', 'peternak.alamat as alamatpeternak', 'jenisternak.jenisternak as jenis')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -51,7 +51,7 @@ class kepemilikanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -62,10 +62,10 @@ class kepemilikanController extends Controller
         $jumlah = $request->get('jumlah');
         $lokasi = $request->get('lokasi');
         DB::table('kepemilikan')->insert([
-            'idpeternak'      => $idpeternak,
-            'idjenis'      => $idjenis,
-            'jumlahternak'      => $jumlah,
-            'lokasiternak'      => $lokasi,
+            'idpeternak' => $idpeternak,
+            'idjenis' => $idjenis,
+            'jumlahternak' => $jumlah,
+            'lokasiternak' => $lokasi,
         ]);
 
         \Session::flash("flash_notification", [
@@ -75,15 +75,31 @@ class kepemilikanController extends Controller
 
         return redirect('/kepemilikan/create');
     }
-    public function ceknik ($id){
-        $x = DB::table('peternak')->where('nik',$id)->get();
-        return response()->json($x);
+
+    public function ceknik($id)
+    {
+        $pengecekan = DB::table('peternak')->select('*')->where('nik', '=', $id);
+        if ($pengecekan->exists()) {
+            $x = DB::table('peternak')
+                ->join('kecamatan', 'peternak.idkecamatan', '=', 'kecamatan.idkecamatan')
+                ->join('desa', 'desa.iddesa', '=', 'peternak.iddesa')
+                ->select('peternak.*', 'kecamatan.kecamatan', 'desa.namadesa')
+                ->where('nik', $id)->get();
+            return response()->json($x);
+        } else {
+            $array = array();
+            $x = DB::table('peternak')
+                ->join('kecamatan', 'peternak.idkecamatan', '=', 'kecamatan.idkecamatan')
+                ->join('desa', 'desa.iddesa', '=', 'peternak.iddesa')
+                ->select('peternak.*', 'kecamatan.kecamatan', 'desa.namadesa')
+                ->where('nik', $array)->get();
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -94,7 +110,7 @@ class kepemilikanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -105,8 +121,8 @@ class kepemilikanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -117,7 +133,7 @@ class kepemilikanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
