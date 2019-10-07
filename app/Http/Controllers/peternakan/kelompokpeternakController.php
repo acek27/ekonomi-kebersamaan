@@ -23,7 +23,8 @@ class kelompokpeternakController extends Controller
      public function tabelkelompokpeternak (){
         return DataTables::of(DB::table('kelompokternak')
                 ->join('kecamatan', 'kelompokternak.idkecamatan', '=', 'kecamatan.idkecamatan')
-                ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan')
+                ->join('desa', 'kelompokternak.iddesa', '=', 'desa.iddesa')
+                ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
                 ->get())
                 ->addColumn('action', function ($data) {
                     $del = '<a href="#" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -41,7 +42,8 @@ class kelompokpeternakController extends Controller
     public function create()
     {
         $kecamatan = DB::table('kecamatan')->get();
-        return view('peternakan.kelompokpeternak',compact('kecamatan'));
+        $desa = DB::table('desa')->get();
+        return view('peternakan.kelompokpeternak',compact('kecamatan','desa'));
     }
 
     /**
@@ -53,9 +55,15 @@ class kelompokpeternakController extends Controller
     public function store(Request $request)
     {
         $nama = $request->get('nama');
+        $alamat = $request->get('alamat');
+        $iddesa = $request->get('iddesa');
+        $thn = $request->get('thn');
         $idkecamatan = $request->get('idkecamatan');
         DB::table('kelompokternak')->insert([
             'namakelompokternak'      => $nama,
+            'iddesa'     => $iddesa,
+            'alamatsekretariat'     => $alamat,
+            'tahunpembentukan'     => $thn,
             'idkecamatan'     => $idkecamatan
         ]);
 

@@ -17,13 +17,11 @@
 <form method="POST" action="{{route('kepemilikan.store')}}" role="form">
     @csrf
     <label style="color:black">NIK</label>
-    <input type="text" class="form-control form-control-user" id="idpeternak" name="idpeternak" aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp" placeholder="" required>
     <button type="button" id="tb_nik">Cek ID</button>
     <br>
     <label style="color:black">Nama Peternak</label>
     <input type="text" class="form-control form-control-user" value="" id="nama" name="nama" aria-describedby="emailHelp" disabled>
-    <label style="color:black">Alamat</label>
-    <input type="text" class="form-control form-control-user" value="" id="alamat" name="alamat" aria-describedby="emailHelp" required disabled>
     <label style="color:black">Jenis Ternak</label>
     <select class="form-control show-tick" name="idjenis" required>
         <option value="">-- Please select --</option>
@@ -31,8 +29,13 @@
         <option value="{{$values->idjenis}}">{{$values->jenisternak}}</option>
         @endforeach
     </select>
-    <label style="color:black">Jumlah Ternak</label>
+    <label style="color:black">Jumlah Ternak (ekor)</label>
     <input type="text" class="form-control form-control-user" id="jumlah" name="jumlah" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Lokasi Ternak</label>
+    <input type="text" class="form-control form-control-user" id="lokasi" name="lokasi" aria-describedby="emailHelp" placeholder="" required>
+   
+   
+    <input type="text" class="form-control form-control-user" id="idpeternak" name="idpeternak" aria-describedby="emailHelp" placeholder="ID PETERNAK" required hidden>
     
 
     <br>
@@ -52,9 +55,10 @@
                     <tr>
                         <th style="width: 7%;text-align: center; vertical-align: middle">ID Pemilik</th>
                         <th style="text-align: center; vertical-align: middle">Nama</th>
-                        <th style="text-align: center; vertical-align: middle">Kecamatan</th>
+                        <th style="text-align: center; vertical-align: middle">Alamat</th>
                         <th style="text-align: center; vertical-align: middle">Jenis Ternak</th>
                         <th style="text-align: center; vertical-align: middle">Jumlah Ternak</th>
+                        <th style="text-align: center; vertical-align: middle">Lokasi Ternak</th>
                         <th style="text-align: center; vertical-align: middle">Action</th>
                     </tr>
                 </thead>
@@ -99,6 +103,10 @@
                     name: 'jumlahternak'
                 },
                 {
+                    data: 'lokasiternak',
+                    name: 'lokasiternak'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -112,7 +120,7 @@
     $('#tb_nik').on('click', function(e) {
         e.preventDefault();
 
-        var kode = $("#idpeternak").val();
+        var kode = $("#nik").val();
         var garing = '/';
         $.ajax({
             url: "{{url('/ceknik')}}" + garing + kode,
@@ -122,7 +130,7 @@
                 $.each(x, function(index, z) {
                     $('#nama').val(z.nama);
                     $('#alamat').val(z.alamat);
-                    $('#id').val(z.idpeternak);
+                    $('#idpeternak').val(z.idpeternak);
                 });
             }
         });

@@ -78,7 +78,7 @@
                             Keanggotaan</a>
                         <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan
                             Ternak</a>
-                        <a class="collapse-item active" href="cards.html">Data Kotoran Ternak</a>
+                        <a class="collapse-item active" href="{{route('kotoranternak.index')}}>Data Kotoran Ternak</a>
                     </div>
                 </div>
             </li>
@@ -148,7 +148,7 @@
                             Keanggotaan</a>
                         <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan
                             Ternak</a>
-                        <a class="collapse-item active" href="cards.html">Data Kotoran Ternak</a>
+                        <a class="collapse-item active" href="{{route('kotoranternak.index')}}">Data Kotoran Ternak</a>
                     </div>
                 </div>
             </li>

@@ -24,9 +24,9 @@ class kepemilikanController extends Controller
     public function tabelkepemilikan()
     {
         return DataTables::of(DB::table('kepemilikan')
-            ->join('datapeternak', 'kepemilikan.idpeternak', '=', 'datapeternak.idpeternak')
+            ->join('peternak', 'kepemilikan.idpeternak', '=', 'peternak.idpeternak')
             ->join('jenisternak', 'kepemilikan.idjenis', '=', 'jenisternak.idjenis')
-            ->select('kepemilikan.*','datapeternak.nama as namapeternak', 'datapeternak.alamat as alamatpeternak', 'jenisternak.jenisternak as jenis')
+            ->select('kepemilikan.*','peternak.nama as namapeternak', 'peternak.alamat as alamatpeternak', 'jenisternak.jenisternak as jenis')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -60,10 +60,12 @@ class kepemilikanController extends Controller
         $idpeternak = $request->get('idpeternak');
         $idjenis = $request->get('idjenis');
         $jumlah = $request->get('jumlah');
+        $lokasi = $request->get('lokasi');
         DB::table('kepemilikan')->insert([
             'idpeternak'      => $idpeternak,
             'idjenis'      => $idjenis,
             'jumlahternak'      => $jumlah,
+            'lokasiternak'      => $lokasi,
         ]);
 
         \Session::flash("flash_notification", [
@@ -74,7 +76,7 @@ class kepemilikanController extends Controller
         return redirect('/kepemilikan/create');
     }
     public function ceknik ($id){
-        $x = DB::table('datapeternak')->where('nik',$id)->get();
+        $x = DB::table('peternak')->where('nik',$id)->get();
         return response()->json($x);
     }
 

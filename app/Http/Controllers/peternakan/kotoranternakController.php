@@ -14,7 +14,7 @@ class kotoranternakController extends Controller
      */
     public function index()
     {
-        //
+        return view('peternakan.datakotoran');
     }
 
     /**

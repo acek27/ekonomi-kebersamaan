@@ -19,19 +19,20 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 /*peternakan*/
-Route::resource('dataternak', 'peternakan\dataternakController');
-Route::get('tabelternak', 'peternakan\dataternakController@tabelternak')->name('tabel.ternak');
+Route::resource('dataternak', 'peternakan\dataTernakController');
+Route::get('tabelternak', 'peternakan\dataTernakController@tabelternak')->name('tabel.ternak');
 
 Route::resource('datapeternak', 'peternakan\peternakController');
-Route::get('datapeternak', 'peternakan\peternakController@tabelpeternak')->name('tabel.peternak');
+Route::get('tabelpeternak', 'peternakan\peternakController@tabelpeternak')->name('tabel.peternak');
 
 Route::resource('kelompokpeternak', 'peternakan\kelompokpeternakController');
-Route::get('kelompokpeternak', 'peternakan\kelompokpeternakController@tabelkelompokpeternak')->name('tabel.kelompokpeternak');
+Route::get('tabelkelompokpeternak', 'peternakan\kelompokpeternakController@tabelkelompokpeternak')->name('tabel.kelompokpeternak');
 
 Route::resource('keanggotaanpeternak', 'peternakan\keanggotaanController');
+Route::resource('kotoranternak', 'peternakan\kotoranternakController');
 
 Route::resource('kepemilikan', 'peternakan\kepemilikanController');
-Route::get('kepemilikan', 'peternakan\kepemilikanController@tabelkepemilikan')->name('tabel.kepemilikan');
+Route::get('tabelkepemilikan', 'peternakan\kepemilikanController@tabelkepemilikan')->name('tabel.kepemilikan');
 Route::get('ceknik/{id}', 'peternakan\kepemilikanController@ceknik');
 
 

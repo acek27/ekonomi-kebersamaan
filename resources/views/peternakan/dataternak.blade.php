@@ -45,7 +45,7 @@
                     <th>ID</th>
                     <th style="width: 50%; text-align: left; vertical-align: middle" >Jenis Hewan Ternak</th>
                     <th style="width: 40%; text-align: left; vertical-align: middle" >Nama</th>
-                    <th style="width: 60%; text-align: left; vertical-align: middle" >Action</th>
+                    <th style="width: 60%; text-align: center; vertical-align: middle" >Action</th>
 
                 </tr>
             </thead>
@@ -90,7 +90,6 @@
                 },
             ]
         });
-
         var del = function (id) {
             swal({
                 title: "Apakah anda yakin?",

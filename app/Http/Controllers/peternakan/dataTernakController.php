@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
-class dataternakController extends Controller
+class dataTernakController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,12 +26,14 @@ class dataternakController extends Controller
             ->select('jenisternak.*', 'kategoriternak.kategoriternak as kategori')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
+                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' .'&nbsp'. $del;
             })
             ->make(true);
     }
+
+
 
 
     /**
@@ -49,7 +51,7 @@ class dataternakController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -57,8 +59,8 @@ class dataternakController extends Controller
         $nama = $request->get('nama');
         $idkategori = $request->get('idkategori');
         DB::table('jenisternak')->insert([
-            'jenisternak' => $nama,
-            'idkategori' => $idkategori
+            'jenisternak'      => $nama,
+            'idkategori'     => $idkategori
         ]);
 
         \Session::flash("flash_notification", [
@@ -72,7 +74,7 @@ class dataternakController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -83,7 +85,7 @@ class dataternakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -94,8 +96,8 @@ class dataternakController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -106,7 +108,7 @@ class dataternakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
