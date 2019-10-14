@@ -4,6 +4,8 @@ namespace App\Http\Controllers\pertanian;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\Datatables\Datatables;
 
 class hasilpertanianController extends Controller
 {
@@ -24,7 +26,13 @@ class hasilpertanianController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('pertanian.caripetani');
+    }
+    public function cari()
+    {
+
+        return view('pertanian.caripetani');
     }
 
     /**
@@ -35,7 +43,21 @@ class hasilpertanianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id = $request->get('id');
+        $iddesa = $request->get('lokasi');
+        $jumlah = $request->get('hasil');
+        DB::table('stokpertanian')->insert([
+            'idpetani'      => $id,
+            'iddesa'      => $iddesa,
+            'jumlah'     => $jumlah
+        ]);
+
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil menambah data : $request->nama"
+        ]);
+
+        return redirect('/hasilpertanian/create');
     }
 
     /**
@@ -69,7 +91,21 @@ class hasilpertanianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $id = $request->get('id');
+        $iddesa = $request->get('lokasi');
+        $jumlah = $request->get('hasil');
+        DB::table('stokpertanian')->UPDATE([
+            'idpetani'      => $id,
+            'iddesa'      => $iddesa,
+            'jumlah'     => $jumlah
+        ]);
+
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil menambah data : $request->nama"
+        ]);
+
+        return redirect('/hasilpertanian/create');
     }
 
     /**

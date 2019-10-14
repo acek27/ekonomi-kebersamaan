@@ -22,8 +22,9 @@ class petaniController extends Controller
 
     public function tabelpetani (){
         return DataTables::of(DB::table('petani')
-                ->join('kecamatan', 'petani.idkecamatan', '=', 'kecamatan.idkecamatan')
-                ->select('petani.*', 'kecamatan.kecamatan as namakecamatan')
+                ->join('desa', 'petani.iddesa', '=', 'desa.iddesa')
+                ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+                ->select('petani.*', 'kecamatan.kecamatan as namakecamatan','desa.namadesa as namadesa')
                 ->get())
                 ->addColumn('action', function ($data) {
                     $del = '<a href="#" data-id="' . $data->idpetani . '" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -33,6 +34,8 @@ class petaniController extends Controller
                 ->make(true);
     }
 
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -40,10 +43,11 @@ class petaniController extends Controller
      */
     public function create()
     {
-        // $data = DB::table('datapetani')->get();
-        $kecamatan = DB::table('kecamatan')->get();
-        return view('pertanian.datapetani',compact('kecamatan'));
+        $desa = DB::table('desa')->get();
+        return view('pertanian.datapetani',compact('desa'));
+               
     }
+  
 
     /**
      * Store a newly created resource in storage.
@@ -57,13 +61,13 @@ class petaniController extends Controller
         $alamat = $request->get('alamat');
         $nik = $request->get('nik');
         $telp = $request->get('telp');
-        $idkecamatan = $request->get('idkecamatan');
+        $iddesa = $request->get('iddesa');
         DB::table('petani')->insert([
             'nik'      => $nik,
             'nama'      => $nama,
             'alamat'      => $alamat,
             'telp'      => $telp,
-            'idkecamatan'     => $idkecamatan
+            'iddesa'     => $iddesa
         ]);
 
         \Session::flash("flash_notification", [

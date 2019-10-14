@@ -21,12 +21,12 @@ class datatanamanController extends Controller
 
     public function tabeltanaman()
     {
-        return DataTables::of(DB::table('tanaman')
-            ->join('jenistanaman', 'tanaman.idjenis', '=', 'jenistanaman.idjenis')
-            ->select('tanaman.*', 'jenistanaman.jenistanaman as namajenis')
+        return DataTables::of(DB::table('jenistanaman')
+            ->join('kategoritanaman', 'jenistanaman.idkategori', '=', 'kategoritanaman.idkategori')
+            ->select('jenistanaman.*', 'kategoritanaman.kategoritanaman as namakategori')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idtanaman . '" class="hapus-data"><i class="material-icons">delete</i></a>';
+                $del = '<a href="#" data-id="' . $data->idjenis . '" class="hapus-data"><i class="material-icons">delete</i></a>';
                 $edit = '<a href="#"><i class="material-icons">edit</i></a>';
                 return $edit . '&nbsp' . $del;
             })
@@ -40,8 +40,8 @@ class datatanamanController extends Controller
      */
     public function create()
     {
-        $jenis = DB::table('jenistanaman')->get();
-        return view('pertanian.datatanaman', compact('jenis'));
+        $kategori = DB::table('kategoritanaman')->get();
+        return view('pertanian.datatanaman', compact('kategori'));
     }
 
     /**
@@ -53,10 +53,10 @@ class datatanamanController extends Controller
     public function store(Request $request)
     {
         $nama = $request->get('nama');
-        $idjenis = $request->get('idjenis');
-        DB::table('tanaman')->insert([
-            'namatanaman'      => $nama,
-            'idjenis'     => $idjenis
+        $idkategori = $request->get('idkategori');
+        DB::table('jenistanaman')->insert([
+            'jenistanaman'      => $nama,
+            'idkategori'     => $idkategori
         ]);
 
         \Session::flash("flash_notification", [

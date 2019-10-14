@@ -18,7 +18,7 @@
     @csrf
     <label style="color:black">Nama Kelompok</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
-    <label style="color:black">Alamat</label>
+    <label style="color:black">Alamat Sekretariat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Desa</label>
     <select class="form-control show-tick" name="iddesa" required>
@@ -61,7 +61,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nama Kelompok Peternak</th>
-                    <th>AlamatSekretariat</th>
+                    <th>Alamat Sekretariat</th>
                     <th>Desa</th>
                     <th>Kecamatan</th>
                     <th>Tahun Pembentukan</th>

@@ -28,17 +28,12 @@
     </select>
     <label style="color:black">Alamat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
-    <label style="color:black">Kecamatan</label>
-    <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
-        <option value="">-- Please select --</option>
-        @foreach($kecamatan as $values)
-        <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
-        @endforeach
-    </select>
     <label style="color:black">Desa</label>
     <select class="form-control show-tick" id='iddesa' name="iddesa" required>
         <option value="">-- Please select --</option>
-
+        @foreach($desa as $values)
+        <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
+        @endforeach
     </select>
     <label style="color:black">No Telp</label>
     <input type="text" class="form-control form-control-user" id="telp" name="telp" aria-describedby="emailHelp" placeholder="" required>
@@ -125,31 +120,6 @@
                     align: 'center'
                 },
             ]
-        });
-    });
-
-    $(document).ready(function() {
-
-        $('#idkecamatan').change(function() {
-            //  var id=$(this).val();
-            var id = $("#idkecamatan").val();
-            $.ajax({
-                url: "{{url('/getdesa')}}/" + id,
-                method : "POST",
-                data: {id: id},
-                async: true,
-                datatype: 'json',
-                success: function(desa) {
-                    var i;
-                    var html;
-                    //  $.each(x, function(index,z {
-                    for (i = 0; i < desa.length; i++) {
-                        html += <option value = "">'+desa[i].namadesa+'</option>;
-                    }
-                    $('#iddesa').val(html);
-                }
-            });
-            return false;
         });
     });
 </script>

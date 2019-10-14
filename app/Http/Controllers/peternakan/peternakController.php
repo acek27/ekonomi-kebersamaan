@@ -22,8 +22,8 @@ class peternakController extends Controller
 
     public function tabelpeternak (){
         return DataTables::of(DB::table('peternak')
-                ->join('kecamatan', 'peternak.idkecamatan', '=', 'kecamatan.idkecamatan')
                 ->join('desa', 'peternak.iddesa', '=', 'desa.iddesa')
+                ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
                 ->select('peternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
                 ->get())
                 ->addColumn('action', function ($data) {

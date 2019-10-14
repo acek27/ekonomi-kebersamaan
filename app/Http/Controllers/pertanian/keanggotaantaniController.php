@@ -19,6 +19,36 @@ class keanggotaantaniController extends Controller
         return view('dashboard');
     }
 
+    public function tabelpoktan()
+    {
+        return DataTables::of(DB::table('keanggotaanpoktan')
+            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
+            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpoktan.iddesa')
+            ->join('kelompokpetani', 'kelompokpetani.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+            ->select('keanggotaanpoktan.*','petani.nama as namapetani','petani.nik as nik', 'desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
+                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
+                return $edit . '&nbsp' . $del;
+            })
+            ->make(true);
+    }
+
+
+
+    public function cekniktani ($id){
+        $pengecekan = DB::table('petani')->where('nik','=',$id);
+        if ($pengecekan->exists()){
+            $x = DB::table('petani')->where('nik',$id)->get();
+            return response()->json($x);
+        } else {
+            $value = array();
+            $x = DB::table('petani')->where('nik',$value)->get();
+        return response()->json($x);
+        }
+        
+    }
  
     /**
      * Show the form for creating a new resource.
@@ -28,9 +58,11 @@ class keanggotaantaniController extends Controller
     public function create()
     {
         
+        $desa = DB::table('desa')->get();
+        $kecamatan = DB::table('kecamatan')->get();
         $kelompok = DB::table('kelompokpetani')->get();
         $date = date('d-m-Y');
-        return view('peternakan.keanggotaanpeternak',compact('date','kelompok'));
+        return view('pertanian.keanggotaanpetani',compact('date','kelompok','desa','kecamatan'));
     }
 
     /**
@@ -41,9 +73,27 @@ class keanggotaantaniController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
-        return redirect('/keanggotaan/create');
+
+        $idpetani = $request->get('idpetani');
+        $luas = $request->get('lahan');
+        $iddesa = $request->get('iddesa');
+        $idkelompok = $request->get('idkelompok');
+        $jabatan = $request->get('jabatan');
+        $tgl = date('Y-m-d');
+        DB::table('keanggotaanpoktan')->insert([
+            'idpetani'      => $idpetani,
+            'luaslahan'     => $luas,
+            'iddesa'        => $iddesa,
+            'idkelompok'    =>$idkelompok,
+            'jabatan'       =>$jabatan,
+            'tglbergabung'  =>$tgl,
+        ]);
+
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil menambah data!"
+        ]);
+        return redirect('/keanggotaanpetani/create');
     }
 
     /**

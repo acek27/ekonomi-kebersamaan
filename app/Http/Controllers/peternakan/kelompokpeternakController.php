@@ -22,8 +22,8 @@ class kelompokpeternakController extends Controller
 
      public function tabelkelompokpeternak (){
         return DataTables::of(DB::table('kelompokternak')
-                ->join('kecamatan', 'kelompokternak.idkecamatan', '=', 'kecamatan.idkecamatan')
                 ->join('desa', 'kelompokternak.iddesa', '=', 'desa.iddesa')
+                ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
                 ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
                 ->get())
                 ->addColumn('action', function ($data) {

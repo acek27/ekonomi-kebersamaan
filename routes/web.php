@@ -48,6 +48,8 @@ Route::resource('kelompokpetani', 'pertanian\kelompokpetaniController');
 Route::get('kelompokpetani', 'pertanian\kelompokpetaniController@tabelkelompokpetani')->name('tabel.kelompokpetani');
 
 Route::resource('keanggotaanpetani', 'pertanian\keanggotaantaniController');
+Route::get('tabelkeanggotaan', 'pertanian\keanggotaantaniController@tabelpoktan')->name('tabel.poktan');
+Route::get('cekniktani/{id}', 'pertanian\keanggotaantaniController@cekniktani');
 
 
 /* Ekonomi */

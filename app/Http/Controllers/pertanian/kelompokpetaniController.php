@@ -23,7 +23,7 @@ class kelompokpetaniController extends Controller
      public function tabelkelompokpetani (){
         return DataTables::of(DB::table('kelompokpetani')
                 ->join('desa', 'kelompokpetani.iddesa', '=', 'desa.iddesa')
-                ->join('kecamatan', 'kelompokpetani.idkecamatan', '=', 'kecamatan.idkecamatan')
+                ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
                 ->select('kelompokpetani.*', 'kecamatan.kecamatan as namakecamatan','desa.namadesa as desa')
                 ->get())
                 ->addColumn('action', function ($data) {
@@ -60,13 +60,11 @@ class kelompokpetaniController extends Controller
         $iddesa = $request->get('iddesa');
         $thn = $request->get('thn');
         $jenis = $request->get('jeniskelompok');
-        $idkecamatan = $request->get('idkecamatan');
         DB::table('kelompokpetani')->insert([
             'namakelompok'      => $nama,
             'alamatsekretariat'      => $alamat,
             'iddesa'      => $iddesa,
-            'idkecamatan'     => $idkecamatan,
-            'tahunpebentukan'      => $thn,
+            'tahunpembentukan'      => $thn,
             'jeniskelompok'      => $jenis
             
         ]);
