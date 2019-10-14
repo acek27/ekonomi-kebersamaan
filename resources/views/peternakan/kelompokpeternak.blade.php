@@ -21,7 +21,7 @@
     <label style="color:black">Alamat Sekretariat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Desa</label>
-    <select class="form-control show-tick" name="iddesa" required>
+    <select class="form-control show-tick" id="desa" name="iddesa" required>
         <option value="">-- Please select --</option>
         @foreach($desa as $values)
         <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
@@ -56,7 +56,7 @@
      -->
     <br>
     <br>
-    <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
+    <button type="submit" id="simpan" style="align-center" class="btn-sm btn-primary shadow-sm">
         SIMPAN</button>
 
 </form>
@@ -78,7 +78,7 @@
                     <th>Kecamatan</th>
                     <th>Tahun Pembentukan</th>
                     <th>Action</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -132,6 +132,57 @@
                     align: 'center'
                 },
             ]
+        });
+        var del = function (id) {
+            swal({
+                title: "Apakah anda yakin?",
+                text: "Anda tidak dapat mengembalikan data yang sudah terhapus!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Iya!",
+                cancelButtonText: "Tidak!",
+            }).then(
+                function (result) {
+                    $.ajax({
+                        url: "{{route('kelompokpeternak.index')}}/" + id,
+                        method: "DELETE",
+                    }).done(function (msg) {
+                        dt.ajax.reload();
+                        $('#nama').val("");
+                        $('#alamat').val("");
+                        $('#desa').val("");
+                        $('#thn').val("");
+                        $('#simpan').text("SIMPAN");
+                        swal("Deleted!", "Data sudah terhapus.", "success");
+                    }).fail(function (textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                }, function (dismiss) {
+                    // dismiss can be 'cancel', 'overlay', 'esc' or 'timer'
+                    swal("Cancelled", "Data batal dihapus", "error");
+                });
+        };
+        $('body').on('click', '.hapus-data', function () {
+            del($(this).attr('data-id'));
+        });
+        $('body').on("click", '.edit-modal', function () {
+            var idkelompokpeternak = $(this).attr('data-id');
+            $.ajax({
+                url: "{{url('/cekkelompokpeternak')}}/" + idkelompokpeternak,
+                type: 'GET',
+                datatype: 'json',
+                success: function (x) {
+                    $.each(x, function (index, z) {
+                        $('#nama').val(z.namakelompokternak);
+                        $('#id').val(z.idkelompokternak);
+                        $('#alamat').val(z.alamatsekretariat);
+                        $('#desa').val(z.iddesa);
+                        $('#thn').val(z.tahunpembentukan);
+                        $('#simpan').text("UPDATE");
+                    });
+                }
+            });
         });
     });
 </script>

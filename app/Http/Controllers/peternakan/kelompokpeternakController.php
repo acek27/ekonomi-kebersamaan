@@ -20,18 +20,19 @@ class kelompokpeternakController extends Controller
         return view('dashboard');
     }
 
-     public function tabelkelompokpeternak (){
+    public function tabelkelompokpeternak()
+    {
         return DataTables::of(DB::table('kelompokternak')
-                ->join('desa', 'kelompokternak.iddesa', '=', 'desa.iddesa')
-                ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
-                ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
-                ->get())
-                ->addColumn('action', function ($data) {
-                    $del = '<a href="#" class="hapus-data"><i class="material-icons">delete</i></a>';
-                    $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                    return $edit . '&nbsp' . $del;
-                })
-                ->make(true);
+            ->join('desa', 'kelompokternak.iddesa', '=', 'desa.iddesa')
+            ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="' . $data->idkelompokternak . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idkelompokternak . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
+            })
+            ->make(true);
     }
 
     /**
@@ -43,13 +44,13 @@ class kelompokpeternakController extends Controller
     {
         $kecamatan = DB::table('kecamatan')->get();
         $desa = DB::table('desa')->get();
-        return view('peternakan.kelompokpeternak',compact('kecamatan','desa'));
+        return view('peternakan.kelompokpeternak', compact('kecamatan', 'desa'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -59,26 +60,44 @@ class kelompokpeternakController extends Controller
         $iddesa = $request->get('iddesa');
         $thn = $request->get('thn');
         $idkecamatan = $request->get('idkecamatan');
-        DB::table('kelompokternak')->insert([
-            'namakelompokternak'      => $nama,
-            'iddesa'     => $iddesa,
-            'alamatsekretariat'     => $alamat,
-            'tahunpembentukan'     => $thn,
-            'idkecamatan'     => $idkecamatan
-        ]);
+        $id = $request->get('id');
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah kelompok : $request->nama"
-        ]);
+        $pengecekan = DB::table('kelompokternak')->select('*')
+            ->where('idkelompokternak', '=', $id)
+            ->where('namakelompokternak', '=', $nama);
+
+        if ($pengecekan->exists()) {
+
+        } else {
+            DB::table('kelompokternak')->insert([
+                'namakelompokternak' => $nama,
+                'iddesa' => $iddesa,
+                'alamatsekretariat' => $alamat,
+                'tahunpembentukan' => $thn,
+                'idkecamatan' => $idkecamatan
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Berhasil menambah kelompok : $request->nama"
+            ]);
+        }
 
         return redirect('/kelompokpeternak/create');
+    }
+
+    public function cekkelompokpeternak($id)
+    {
+        $x = DB::table('kelompokternak')
+            ->where('idkelompokternak', $id)
+            ->get();
+        return response()->json($x);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -89,7 +108,7 @@ class kelompokpeternakController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -100,8 +119,8 @@ class kelompokpeternakController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -112,11 +131,11 @@ class kelompokpeternakController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::table('kelompokternak')->where('idkelompokternak', '=', $id)->delete();
     }
 }

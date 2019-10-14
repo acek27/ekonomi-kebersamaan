@@ -19,6 +19,24 @@ class keanggotaanController extends Controller
         return view('dashboard');
     }
 
+    public function tabelpokter()
+    {
+        return DataTables::of(DB::table('keanggotaanpeternak')
+            ->join('peternak', 'keanggotaanpeternak.idpeternak', '=', 'peternak.idpeternak')
+            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpeternak.iddesa')
+            ->join('jenisternak', 'jenisternak.idjenis', '=', 'keanggotaanpeternak.idjenis')
+            ->join('kelompokternak', 'kelompokternak.idkelompokternak', '=', 'keanggotaanpeternak.idkelompokternak')
+            ->select('keanggotaanpeternak.*','peternak.nama as namapeternak','peternak.nik as nik', 'jenisternak.jenisternak as jenisternak', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
+                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
+                return $edit . '&nbsp' . $del;
+            })
+            ->make(true);
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -28,9 +46,11 @@ class keanggotaanController extends Controller
     public function create()
     {
         $kelompok = DB::table('kelompokternak')->get();
+        $jenisternak = DB::table('jenisternak')->get();
+        $desa = DB::table('desa')->get();
         $peternak = DB::table('peternak')->get();
         $date = date('d-m-Y');
-        return view('peternakan.keanggotaanpeternak',compact('date','kelompok','peternak'));
+        return view('peternakan.keanggotaanpeternak',compact('date','kelompok','peternak','desa','jenisternak'));
     }
 
     /**
@@ -42,8 +62,29 @@ class keanggotaanController extends Controller
     public function store(Request $request)
     {
 
+        $idpeternak = $request->get('idpeternak');
+        $idjenis= $request->get('idjenis');
+        $jumlah= $request->get('jumlah');
+        $iddesa = $request->get('iddesa');
+        $idkelompok = $request->get('idkelompok');
+        $jabatan = $request->get('jabatan');
+        $tgl = date('Y-m-d');
+        DB::table('keanggotaanpeternak')->insert([
+            'idpeternak'      => $idpeternak,
+            'idjenis'     => $idjenis,
+            'jumlah'     => $jumlah,
+            'iddesa'        => $iddesa,
+            'idkelompokternak'    =>$idkelompok,
+            'jabatan'       =>$jabatan,
+            'tglbergabung'  =>$tgl,
+        ]);
 
-        return redirect('/keanggotaan/create');
+        \Session::flash("flash_notification", [
+            "level" => "success",
+            "message" => "Berhasil menambah data!"
+        ]);
+        
+        return redirect('/keanggotaanpeternak/create');
     }
 
     /**

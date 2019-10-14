@@ -76,8 +76,6 @@
                             Peternak</a>
                         <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
                             Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan
-                            Ternak</a>
                         <a class="collapse-item active" href="{{route('kotoranternak.index')}}>Data Kotoran Ternak</a>
                     </div>
                 </div>
@@ -145,8 +143,6 @@
                             Peternak</a>
                         <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
                             Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan
-                            Ternak</a>
                         <a class="collapse-item active" href="{{route('kotoranternak.index')}}">Data Kotoran Ternak</a>
                     </div>
                 </div>
