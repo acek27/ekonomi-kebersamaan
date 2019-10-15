@@ -44,13 +44,11 @@
 
         </select>
         {{--    <input type="text" class="form-control form-control-user" id="thn" name="thn" aria-describedby="emailHelp" placeholder="" required>--}}
-
         <br>
         <br>
         <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
             SIMPAN
         </button>
-
     </form>
     @csrf
     <br>
@@ -70,7 +68,6 @@
                         <th>Kecamatan</th>
                         <th>Tahun Pembentukan</th>
                         <th>Action</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -178,9 +175,9 @@
             });
 
             var start = new Date().getFullYear();
-            var end = start-50;
+            var end = start - 50;
             var options = "";
-            for (var year = start; year >= end  ; year--) {
+            for (var year = start; year >= end; year--) {
                 options += "<option>" + year + "</option>";
             }
             document.getElementById("thn").innerHTML = options;

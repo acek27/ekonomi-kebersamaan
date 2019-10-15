@@ -29,14 +29,12 @@ class keanggotaanController extends Controller
             ->select('keanggotaanpeternak.*','peternak.nama as namapeternak','peternak.nik as nik', 'jenisternak.jenisternak as jenisternak', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
+                $del = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
     }
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -83,7 +81,7 @@ class keanggotaanController extends Controller
             "level" => "success",
             "message" => "Berhasil menambah data!"
         ]);
-        
+
         return redirect('/keanggotaanpeternak/create');
     }
 
@@ -129,6 +127,6 @@ class keanggotaanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('keanggotaanpeternak')->where('idkeanggotaan', '=', $id)->delete();
     }
 }

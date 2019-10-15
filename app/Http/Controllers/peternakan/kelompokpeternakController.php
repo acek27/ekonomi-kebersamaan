@@ -18,7 +18,7 @@ class kelompokpeternakController extends Controller
     public function index()
     {
 //        return view('dashboard');
-        $test =DB::table('keanggotaanpeternak')->where('jumlah','>=',50);
+        $test = DB::table('keanggotaanpeternak')->where('jumlah', '>=', 50);
         print_r($test);
     }
 
@@ -70,7 +70,7 @@ class kelompokpeternakController extends Controller
 
         if ($pengecekan->exists()) {
             DB::table('kelompokternak')
-                ->where('idkelompokternak','=',$id)
+                ->where('idkelompokternak', '=', $id)
                 ->update([
                     'namakelompokternak' => $nama,
                     'iddesa' => $iddesa,
