@@ -17,7 +17,9 @@ class kelompokpeternakController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+//        return view('dashboard');
+        $test =DB::table('keanggotaanpeternak')->where('jumlah','>=',50);
+        print_r($test);
     }
 
     public function tabelkelompokpeternak()
@@ -67,14 +69,25 @@ class kelompokpeternakController extends Controller
             ->where('namakelompokternak', '=', $nama);
 
         if ($pengecekan->exists()) {
+            DB::table('kelompokternak')
+                ->where('idkelompokternak','=',$id)
+                ->update([
+                    'namakelompokternak' => $nama,
+                    'iddesa' => $iddesa,
+                    'alamatsekretariat' => $alamat,
+                    'tahunpembentukan' => $thn
+                ]);
 
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data Berhasil Diupdate!"
+            ]);
         } else {
             DB::table('kelompokternak')->insert([
                 'namakelompokternak' => $nama,
                 'iddesa' => $iddesa,
                 'alamatsekretariat' => $alamat,
-                'tahunpembentukan' => $thn,
-                'idkecamatan' => $idkecamatan
+                'tahunpembentukan' => $thn
             ]);
 
             \Session::flash("flash_notification", [
