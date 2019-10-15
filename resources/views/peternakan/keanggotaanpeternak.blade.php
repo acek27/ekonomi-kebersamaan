@@ -1,6 +1,7 @@
 @extends('layouts.masterdashboard')
 @section('css')
-    <link href="{{asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet"/>
+    {{--    <link href="{{asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet"/>--}}
+    <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}" rel="stylesheet"/>
 @endsection
 @section('isi')
     <!-- Page Heading -->
@@ -60,7 +61,8 @@
             <option value="ketua">Ketua</option>
             <option value="sekretaris">Sekretaris</option>
             <option value="bendahara">Bendahara</option>
-        </select><label style="color:black">Tanggal Bergabung</label>
+        </select>
+        <label style="color:black">Tanggal Bergabung</label>
         <input type="text" class="form-control datepicker" id="datepicker" name="tgl"
                aria-describedby="emailHelp" required>
         <input type="text" class="form-control form-control-user" id="idpeternak" name="idpeternak"
@@ -102,8 +104,8 @@
 @endsection
 
 @push('script')
-    <script src="{{asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>
-    <script src="{{asset('plugins/dist/js/standalone/selectize.js')}}"></script>
+    <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js')}}"></script>
+    {{--    <script src="{{asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>--}}
     <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
@@ -188,7 +190,6 @@
                 del($(this).attr('data-id'));
             });
         });
-
 
         $(function () {
             $('.datepicker').datepicker({
