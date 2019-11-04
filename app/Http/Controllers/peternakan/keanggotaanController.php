@@ -26,7 +26,7 @@ class keanggotaanController extends Controller
             ->join('desa', 'desa.iddesa', '=', 'keanggotaanpeternak.iddesa')
             ->join('jenisternak', 'jenisternak.idjenis', '=', 'keanggotaanpeternak.idjenis')
             ->join('kelompokternak', 'kelompokternak.idkelompokternak', '=', 'keanggotaanpeternak.idkelompokternak')
-            ->select('keanggotaanpeternak.*','peternak.nama as namapeternak','peternak.nik as nik', 'jenisternak.jenisternak as jenisternak', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
+            ->select('keanggotaanpeternak.*', 'peternak.nama as namapeternak', 'peternak.nik as nik', 'jenisternak.jenisternak as jenisternak', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
@@ -35,6 +35,7 @@ class keanggotaanController extends Controller
             })
             ->make(true);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -48,33 +49,34 @@ class keanggotaanController extends Controller
         $desa = DB::table('desa')->get();
         $peternak = DB::table('peternak')->get();
         $date = date('d-m-Y');
-        return view('peternakan.keanggotaanpeternak',compact('date','kelompok','peternak','desa','jenisternak'));
+        return view('peternakan.keanggotaanpeternak', compact('date', 'kelompok', 'peternak', 'desa', 'jenisternak'));
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
         $idpeternak = $request->get('idpeternak');
-        $idjenis= $request->get('idjenis');
-        $jumlah= $request->get('jumlah');
+        $idjenis = $request->get('idjenis');
+        $jumlah = $request->get('jumlah');
         $iddesa = $request->get('iddesa');
         $idkelompok = $request->get('idkelompok');
         $jabatan = $request->get('jabatan');
         $tgl = date('Y-m-d');
         DB::table('keanggotaanpeternak')->insert([
-            'idpeternak'      => $idpeternak,
-            'idjenis'     => $idjenis,
-            'jumlah'     => $jumlah,
-            'iddesa'        => $iddesa,
-            'idkelompokternak'    =>$idkelompok,
-            'jabatan'       =>$jabatan,
-            'tglbergabung'  =>$tgl,
+            'idpeternak' => $idpeternak,
+            'idjenis' => $idjenis,
+            'jumlah' => $jumlah,
+            'iddesa' => $iddesa,
+            'idkelompokternak' => $idkelompok,
+            'jabatan' => $jabatan,
+            'tglbergabung' => $tgl,
         ]);
 
         \Session::flash("flash_notification", [
@@ -88,7 +90,7 @@ class keanggotaanController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -99,7 +101,7 @@ class keanggotaanController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -110,8 +112,8 @@ class keanggotaanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -122,7 +124,7 @@ class keanggotaanController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

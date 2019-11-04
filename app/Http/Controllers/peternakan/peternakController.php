@@ -50,9 +50,8 @@ class peternakController extends Controller
      */
     public function create()
     {
-        $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('peternakan.datapeternak', compact('kecamatan', 'desa'));
+        return view('peternakan.datapeternak', compact('kecamatan'));
     }
 
     /**
@@ -80,15 +79,15 @@ class peternakController extends Controller
 
         if ($pengecekan->exists()) {
             DB::table('peternak')
-                ->where('idpeternak','=',$id)
+                ->where('idpeternak', '=', $id)
                 ->update([
-                'nama' => $nama,
-                'jeniskelamin' => $jk,
-                'iddesa' => $iddesa,
-                'alamat' => $alamat,
-                'telp' => $telp
+                    'nama' => $nama,
+                    'jeniskelamin' => $jk,
+                    'iddesa' => $iddesa,
+                    'alamat' => $alamat,
+                    'telp' => $telp
 //            'idkecamatan'     => $idkecamatan
-            ]);
+                ]);
 
             \Session::flash("flash_notification", [
                 "level" => "success",

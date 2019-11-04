@@ -134,7 +134,7 @@
                     datatype: 'json',
                     success: function (x) {
                         $.each(x, function (index, z) {
-                            $('#nama').val(z.jenisternak);
+                            $('#nama').val(z.jenisternak).prop( "disabled", true );
                             $('#id').val(z.idjenis);
                             $('#idkategori').val(z.idkategori);
                             $('#simpan').text("UPDATE");

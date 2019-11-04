@@ -37,19 +37,17 @@
         <label style="color:black">Alamat</label>
         <input type="text" class="form-control form-control-user" value="{{old('alamat')}}" id="alamat" name="alamat"
                aria-describedby="emailHelp" placeholder="" required>
-        <label style="color:black">Desa</label>
-        <select class="form-control show-tick" value="{{old('iddesa')}}" id="desa" name="iddesa" required>
+        <label style="color:black">Kecamatan</label>
+        <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
             <option value="">-- Please select --</option>
-            @foreach($desa as $values)
-                <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
+            @foreach($kecamatan as $value)
+                <option style="text-transform: lowercase" value="{{$value->idkecamatan}}">{{$value->kecamatan}}</option>
             @endforeach
         </select>
-        <label style="color:black">Kecamatan</label>
-        <select class="form-control show-tick" value="{{old('idkecamatan')}}" name="idkecamatan" required>
+        <label style="color:black">Desa</label>
+        <select class="form-control show-tick" id="iddesa" name="iddesa" required>
             <option value="">-- Please select --</option>
-            @foreach($kecamatan as $values)
-                <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
-            @endforeach
+
         </select>
         <label style="color:black">No Telp</label>
         <input type="text" class="form-control form-control-user" id="telp" value="{{old('telp')}}" name="telp"
@@ -167,6 +165,30 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#idkecamatan').change(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/datadesa/" + id,
+                    method: "POST",
+                    data: {id: id},
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        var html = '';
+                        var i;
+                        for (i = 0; i < data.length; i++) {
+                            html += '<option style="text-transform: lowercase;" value=' + data[i].iddesa + '>' + data[i].namadesa + '</option>';
+                        }
+                        $('#iddesa').html(html);
+                    }
+                });
+                return false;
+            });
+
         });
     </script>
 @endpush

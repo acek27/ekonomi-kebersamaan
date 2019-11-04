@@ -7,7 +7,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-  <h1 class="h3 mb-0 text-gray-800">Data Hasil Pertanian</h1>
+  <h1 class="h3 mb-0 text-gray-800">Data Hasil Peternakan</h1>
   <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
 <div class="row">
@@ -27,21 +27,22 @@
         </div>
         @endif
         @foreach($data as $value)
-        <form method="POST" action="{{route('hasilpertanian.store')}}" role="form">
+        <form method="POST" action="{{route('hasilpeternakan.store')}}" role="form">
           @csrf
-          <label style="color:black">Nama Petani : {{$value->nama}} </label> <br>
-          <label style="color:black">Lokasi Lahan : {{$value->namadesa}} </label> <br>
-          <label style="color:black">Kelompok : {{$value->namakelompok}} </label> <br>
+          <label style="color:black">Nama Peternak : {{$value->nama}} </label> <br>
+          <label style="color:black">Lokasi Peternakan : {{$value->namadesa}} </label> <br>
+          <label style="color:black">Jenis Ternak : {{$value->jenisternak}} </label> <br>
+          <label style="color:black">Kelompok : {{$value->namakelompokternak}} </label> <br>
           <br>
-          <label style="color:black">Jenis Tanaman</label>
+          <label style="color:black">Hasil Produksi</label>
           <select class="form-control show-tick" name="idjenis" required>
             <option value="">-- Please select --</option>
-            @foreach($jenis as $values)
-            <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
-            @endforeach
+            <option value="kohe">KOHE</option>
+            <option value="urie">URINE</option>
+            <option value="bokasi">BOKASI</option>
           </select>
-          <label style="color:black">Hasil Produksi (Kg)</label>
-          <input type="text" class="form-control form-control-user" id="hasil" name="hasil"
+          <label style="color:black">Jumlah Produksi </label>
+          <input type="text" class="form-control form-control-user" id="hasilbokasi" name="hasilbokasi"
           aria-describedby="emailHelp" placeholder="" required>
           <input type="text" class="form-control form-control-user" id="idkeanggotaan"
           name="idkeanggotaan" aria-describedby="emailHelp" value="{{$value->idkeanggotaan}}" hidden>
@@ -63,25 +64,25 @@
     <!-- Project Card Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">HASIL PENJUALAN</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Hasil Penjualan</h6>
       </div>
       <div class="card-body">
         <!-- <div class="row"> -->
-        <form method="POST" action="{{route('hasilpertanian.store')}}" role="form">
+        <form method="POST" action="{{route('hasilpeternakan.store')}}" role="form">
           @csrf
-          <label style="color:black">Jenis Tanaman</label>
+          <label style="color:black">Hasil Produksi</label>
           <select class="form-control show-tick" name="idjenis" required>
             <option value="">-- Please select --</option>
-            @foreach($jenis as $values)
-            <option value="{{$values->idjenis}}">{{$values->jenistanaman}}</option>
-            @endforeach
+            <option value="kohe">KOHE</option>
+            <option value="urie">URINE</option>
+            <option value="bokasi">BOKASI</option>
           </select> <br>
           <label style="color:black">Stok Saat Ini</label> <br>
           <h1 style="font-size: 40pt"> {{ 0 }} kg</h1>
-          <label style="color:black">Terjual</label>
+          <label style="color:black">Penjualan</label>
           <input type="text" class="form-control form-control-user" id="terjual" name="terjual" aria-describedby="emailHelp" placeholder="" required>
           <br>
-          <button type="submit" style="align-center" class="btn-sm btn-primary shadow-sm">
+          <button type="submit" class="btn-sm btn-primary shadow-sm">
             SIMPAN</button>
         </form>
       </div>

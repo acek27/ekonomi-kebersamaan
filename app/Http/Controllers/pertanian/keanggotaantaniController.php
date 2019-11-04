@@ -25,13 +25,13 @@ class keanggotaantaniController extends Controller
             ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
             ->join('desa', 'desa.iddesa', '=', 'keanggotaanpoktan.iddesa')
             ->join('kelompokpetani', 'kelompokpetani.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-            ->select('keanggotaanpoktan.*','petani.nama as namapetani','petani.nik as nik', 'desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
+            ->select('keanggotaanpoktan.*','petani.nama as namapetani','petani.nik as nik', 'petani.alamat as alamat','desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
                 $edit = '<a href="#"><i class="material-icons">edit</i></a>';
                 return $edit . '&nbsp' . $del;
-            })
+            }) 
             ->make(true);
     }
 

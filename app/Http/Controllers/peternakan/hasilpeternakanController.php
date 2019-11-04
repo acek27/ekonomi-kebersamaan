@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\pertanian;
+namespace App\Http\Controllers\peternakan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
-class hasilpertanianController extends Controller
+class hasilpeternakanController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -24,17 +24,17 @@ class hasilpertanianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function tabelcaritani()
+    public function tabelcaripeternak()
     {
-        return DataTables::of(DB::table('keanggotaanpoktan')
-            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
-            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpoktan.iddesa')
-            ->join('kelompokpetani', 'kelompokpetani.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-            ->select('keanggotaanpoktan.*', 'petani.nama as namapetani', 'petani.nik as nik', 'petani.alamat as alamat', 'desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
+        return DataTables::of(DB::table('keanggotaanpeternak')
+            ->join('peternak', 'keanggotaanpeternak.idpeternak', '=', 'peternak.idpeternak')
+            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpeternak.iddesa')
+            ->join('kelompokternak', 'kelompokternak.idkelompokternak', '=', 'keanggotaanpeternak.idkelompokternak')
+            ->select('keanggotaanpeternak.*', 'peternak.nama as namapeternak', 'peternak.nik as nik', 'peternak.alamat as alamat', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 // $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $input = "<a href=\"" . route('hasilpertanian.show', $data->idkeanggotaan) . "\"><i class=\"material-icons\" title=\"Detail Hasil Pertanian\">Input</i></a>";
+                $input = "<a href=\"" . route('hasilpeternakan.show', $data->idkeanggotaan) . "\"><i class=\"material-icons\" title=\"Detail Hasil Peternakan\">Input</i></a>";
                 return $input;
             })
             ->make(true);
@@ -43,12 +43,11 @@ class hasilpertanianController extends Controller
     public function create()
     {
 
-        return view('pertanian.hasilpertanian');
+        return view('peternakan.hasilpeternakan');
     }
     public function cari()
     {
-
-        return view('pertanian.caripetani');
+        return view('peternakan.caripeternak');
     }
 
     /**
@@ -62,7 +61,7 @@ class hasilpertanianController extends Controller
         $id = $request->get('idkeanggotaan');
         $idjenis = $request->get('idjenis');
         $jumlah = $request->get('hasil');
-        DB::table('hasiltani')->insert([
+        DB::table('hasilternak')->insert([
             'idkeanggotaan'      => $id,
             'idjenis'      => $idjenis,
             'jumlah'     => $jumlah
@@ -73,7 +72,7 @@ class hasilpertanianController extends Controller
             "message" => "Berhasil menambah data : $request->nama"
         ]);
 
-        return redirect('/hasilpertanian'.'/'.$id);
+        return redirect('/hasilpeternakan'.'/'.$id);
     }
 
     /**
@@ -84,13 +83,14 @@ class hasilpertanianController extends Controller
      */
     public function show($id)
     {
-        $jenis = DB::table('jenistanaman')->get();
-        $data = DB::table('keanggotaanpoktan')
-            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
-            ->join('desa', 'keanggotaanpoktan.iddesa', '=', 'desa.iddesa')
-            ->join('kelompokpetani', 'keanggotaanpoktan.idkelompok', '=', 'kelompokpetani.idkelompok')
+        $jenis = DB::table('jenisternak')->get();
+        $data = DB::table('keanggotaanpeternak')
+            ->join('peternak', 'keanggotaanpeternak.idpeternak', '=', 'peternak.idpeternak')
+            ->join('jenisternak', 'keanggotaanpeternak.idjenis', '=', 'jenisternak.idjenis')
+            ->join('desa', 'keanggotaanpeternak.iddesa', '=', 'desa.iddesa')
+            ->join('kelompokternak', 'keanggotaanpeternak.idkelompokternak', '=', 'kelompokternak.idkelompokternak')
             ->where('idkeanggotaan', '=', $id)->get();
-        return view('pertanian.hasilpertanian', compact('data', 'jenis'));
+        return view('peternakan.hasilpeternakan', compact('data', 'jenis'));
 
 
         // print_r($data);
@@ -118,7 +118,7 @@ class hasilpertanianController extends Controller
     {
         $idjenis = $request->get('idjenis');
         $jumlah = $request->get('hasil');
-        DB::table('hasiltani')->insert([
+        DB::table('hasilternak')->insert([
             'idkeanggotaan'      => $id,
             'idjenis'      => $idjenis,
             'jumlah'     => $jumlah
@@ -129,7 +129,7 @@ class hasilpertanianController extends Controller
             "message" => "Berhasil menambah data : $request->nama"
         ]);
         return $id;
-        // return redirect('/hasilpertanian/create');
+        // return redirect('/hasilpeternakan/create');
     }
 
     /**

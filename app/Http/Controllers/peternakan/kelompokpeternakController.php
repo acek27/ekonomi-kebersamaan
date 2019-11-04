@@ -17,9 +17,7 @@ class kelompokpeternakController extends Controller
      */
     public function index()
     {
-//        return view('dashboard');
-        $test = DB::table('keanggotaanpeternak')->where('jumlah', '>=', 50);
-        print_r($test);
+        return view('dashboard');
     }
 
     public function tabelkelompokpeternak()
@@ -45,8 +43,14 @@ class kelompokpeternakController extends Controller
     public function create()
     {
         $kecamatan = DB::table('kecamatan')->get();
-        $desa = DB::table('desa')->get();
-        return view('peternakan.kelompokpeternak', compact('kecamatan', 'desa'));
+        return view('peternakan.kelompokpeternak', compact('kecamatan'));
+    }
+
+    public function datadesa($id)
+    {
+        $data = DB::table('desa')->where('idkecamatan', '=', $id)
+            ->get();
+        return response()->json($data);
     }
 
     /**
