@@ -1,13 +1,16 @@
 @extends('layouts.masterdashboard')
 @section('css')
     <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-@endsection
+    <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}" rel="stylesheet"/>
+    <!-- Custom styles for this template-->
+
+    @endsection
 @section('isi')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Peternak</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                class="fas fa-download fa-sm text-white-50"></i> Buat Laporan</a>
     </div>
     @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
@@ -17,6 +20,18 @@
     @endif
     <form method="POST" action="{{route('datapeternak.store')}}" role="form">
         @csrf
+
+  <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">BIODATA PETERNAK</h6>
+      </div>
+      <div class="card-body">
+
+
         <label style="color:black">NIK</label>
         <input type="text" class="form-control form-control-user" id="nik" name="nik"
                aria-describedby="emailHelp" placeholder="" required>
@@ -25,6 +40,12 @@
         @endif
         <label style="color:black">Nama Peternak</label>
         <input type="text" class="form-control form-control-user" value="{{old('nama')}}" id="nama" name="nama"
+               aria-describedby="emailHelp" placeholder="" required>
+        <label style="color:black">Tempat Lahir</label>
+        <input type="text" class="form-control form-control-user" value="{{old('tl')}}" id="tl" name="tl"
+               aria-describedby="emailHelp" placeholder="" required>
+        <label style="color:black">Tanggal Lahir</label>
+        <input type="text" value="{{old('tgl')}}" class="form-control datepicker" id="datepicker" name="tgl"
                aria-describedby="emailHelp" placeholder="" required>
         <input type="text" class="form-control form-control-user" id="id" name="id" aria-describedby="emailHelp"
                hidden>
@@ -37,7 +58,7 @@
         <label style="color:black">Alamat</label>
         <input type="text" class="form-control form-control-user" value="{{old('alamat')}}" id="alamat" name="alamat"
                aria-describedby="emailHelp" placeholder="" required>
-        <label style="color:black">Kecamatan</label>
+               <label style="color:black">Kecamatan</label>
         <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
             <option value="">-- Please select --</option>
             @foreach($kecamatan as $value)
@@ -61,9 +82,14 @@
             SIMPAN
         </button>
 
-    </form>
-    <br>
-    <div class="card shadow mb-4">
+        </form>
+
+        </div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-peternakan"></div>
+        <br>
+        <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Data Peternak</h6>
         </div>
@@ -94,6 +120,7 @@
 
 @endsection
 @push('script')
+    <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
@@ -105,7 +132,7 @@
                 serverSide: true,
                 ajax: '{{route('tabel.peternak')}}',
                 columns: [
-                    {data: 'idpeternak', name: 'idpeternak'},
+                    {data: 'idbio', name: 'idbio'},
                     {data: 'nik', name: 'nik'},
                     {data: 'nama', name: 'nama'},
                     {data: 'jeniskelamin', name: 'jeniskelamin'},
@@ -141,34 +168,14 @@
                         swal("Cancelled", "Data batal dihapus", "error");
                     });
             };
-            $('body').on('click', '.hapus-data', function () {
-                del($(this).attr('data-id'));
-            });
-            $('body').on("click", '.edit-modal', function () {
-                var idpeternak = $(this).attr('data-id');
-                $.ajax({
-                    url: "{{url('/cekpeternak')}}/" + idpeternak,
-                    type: 'GET',
-                    datatype: 'json',
-                    success: function (x) {
-                        $.each(x, function (index, z) {
-                            $('#nik').val(z.nik);
-                            $("#nik").prop('disabled', true);
-                            $('#id').val(z.idpeternak);
-                            $('#nama').val(z.nama);
-                            $('#jk').val(z.jeniskelamin);
-                            $('#alamat').val(z.alamat);
-                            $('#telp').val(z.telp);
-                            $('#desa').val(z.iddesa);
-                            $('#simpan').text("UPDATE");
-                        });
-                    }
+
+            $(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
                 });
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
+            $(document).ready(function () {
             $('#idkecamatan').change(function () {
                 var id = $(this).val();
                 $.ajax({
@@ -188,7 +195,33 @@
                 });
                 return false;
             });
-
+        });
+            $('body').on('click', '.hapus-data', function () {
+                del($(this).attr('data-id'));
+            });
+            $('body').on("click", '.edit-modal', function () {
+                var idpeternak = $(this).attr('data-id');
+                $.ajax({
+                    url: "{{url('/cekpeternak')}}/" + idpeternak,
+                    type: 'GET',
+                    datatype: 'json',
+                    success: function (x) {
+                        $.each(x, function (index, z) {
+                            $('#nik').val(z.nik);
+                            $("#nik").prop('disabled', true);
+                            $('#id').val(z.idpeternak);
+                            $('#nama').val(z.nama);
+                            $('#tl').val(z.tempatlahir);
+                            $('#datepicker').val(z.tgllahir);
+                            $('#jk').val(z.jeniskelamin);
+                            $('#alamat').val(z.alamat);
+                            $('#telp').val(z.telp);
+                            $('#simpan').text("UPDATE");
+                            
+                        });
+                    }
+                });
+            });
         });
     </script>
 @endpush

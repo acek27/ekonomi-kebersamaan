@@ -16,10 +16,28 @@
 @endif
 <form method="POST" action="{{route('datapetani.store')}}" role="form">
     @csrf
+
+    <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">BIODATA PETANI</h6>
+      </div>
+      <div class="card-body">
+
     <label style="color:black">NIK</label>
-    <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" value="{{old('nik')}}" id="nik" name="nik" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Nama Petani</label>
-    <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" value="{{old('nama')}}" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Tempat Lahir</label>
+    <input type="text" class="form-control form-control-user" value="{{old('tl')}}" id="tl" name="tl"
+           aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Tanggal Lahir</label>
+    <input type="text" value="{{old('tgl')}}" class="form-control datepicker" id="datepicker" name="tgl"
+           aria-describedby="emailHelp" placeholder="" required>
+    <input type="text" class="form-control form-control-user" id="id" name="id" aria-describedby="emailHelp" hidden>
     <label style="color:black">Jenis Kelamin</label>
     <select class="form-control show-tick" name="iddesa" required>
         <option value="">-- Please select --</option>
@@ -28,6 +46,13 @@
     </select>
     <label style="color:black">Alamat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
+    <label style="color:black">Kecamatan</label>
+        <select class="form-control show-tick" value="{{old('idkecamatan')}}" name="idkecamatan" required>
+            <option value="">-- Please select --</option>
+            @foreach($kecamatan as $values)
+                <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
+            @endforeach
+        </select>
     <label style="color:black">Desa</label>
     <select class="form-control show-tick" id='iddesa' name="iddesa" required>
         <option value="">-- Please select --</option>
@@ -44,6 +69,11 @@
         SIMPAN</button>
 
 </form>
+</div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+</div>
 <br>
 <div class="card shadow mb-4">
     <div class="card-header py-3">

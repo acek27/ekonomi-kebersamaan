@@ -2,6 +2,7 @@
 @section('css')
     <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}"
           rel="stylesheet"/>
+    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 @endsection
 @section('isi')
     <!-- Page Heading -->
@@ -18,6 +19,15 @@
     @endif
     <form method="POST" action="{{route('keanggotaanpetani.store')}}" role="form">
         @csrf
+        <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KEANGGOTAAN PETANI</h6>
+      </div>
+      <div class="card-body">
         <label style="color:black">NIK</label>
         <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp"
                placeholder="">
@@ -63,6 +73,11 @@
             SIMPAN
         </button>
     </form>
+    </div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+</div>
     <br>
     <div class="card shadow mb-4">
         <div class="card-header py-3">

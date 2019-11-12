@@ -53,8 +53,8 @@ $(document).ready(function() {
                     name: 'nik'
                 },
                 {
-                    data: 'namapeternak',
-                    name: 'namapeternak'
+                    data: 'nama',
+                    name: 'nama'
                 },
                 {
                     data: 'alamat',

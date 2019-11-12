@@ -22,14 +22,14 @@ class peternakController extends Controller
 
     public function tabelpeternak()
     {
-        return DataTables::of(DB::table('peternak')
-            ->join('desa', 'peternak.iddesa', '=', 'desa.iddesa')
+        return DataTables::of(DB::table('biodatauser')
+            ->join('desa', 'biodatauser.iddesa', '=', 'desa.iddesa')
             ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
-            ->select('peternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
+            ->select('biodatauser.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idpeternak . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
-                $edit = '<a href="#" data-id="' . $data->idpeternak . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->nik . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
                 return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
@@ -37,8 +37,10 @@ class peternakController extends Controller
 
     public function cekpeternak($id)
     {
-        $x = DB::table('peternak')
-            ->where('idpeternak', $id)
+        $x = DB::table('biodatauser')
+            -> join  ('desa','biodatauser.iddesa','=','desa.iddesa')
+            -> join  ('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+            ->where('nik', $id)
             ->get();
         return response()->json($x);
     }
@@ -50,8 +52,9 @@ class peternakController extends Controller
      */
     public function create()
     {
+        $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        return view('peternakan.datapeternak', compact('kecamatan'));
+        return view('peternakan.datapeternak', compact('kecamatan', 'desa'));
     }
 
     /**
@@ -66,6 +69,8 @@ class peternakController extends Controller
             'telp' => 'numeric|required'
         ]);
         $nama = $request->get('nama');
+        $tl = $request->get('tl');
+        $tgl = $request->get('tgl');
         $alamat = $request->get('alamat');
         $jk = $request->get('jk');
         $iddesa = $request->get('iddesa');
@@ -73,43 +78,46 @@ class peternakController extends Controller
         $telp = $request->get('telp');
         $id = $request->get('id');
 
-        $pengecekan = DB::table('peternak')->select('*')
-            ->where('idpeternak', '=', $id)
+        $pengecekan = DB::table('biodatauser')->select('*')
+            ->where('nik', '=', $id)
             ->where('nama', '=', $nama);
 
         if ($pengecekan->exists()) {
-            DB::table('peternak')
-                ->where('idpeternak', '=', $id)
+            DB::table('biodatauser')
+                ->where('nik','=',$id)
                 ->update([
-                    'nama' => $nama,
-                    'jeniskelamin' => $jk,
-                    'iddesa' => $iddesa,
-                    'alamat' => $alamat,
-                    'telp' => $telp
-//            'idkecamatan'     => $idkecamatan
-                ]);
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+
+            ]);
 
             \Session::flash("flash_notification", [
                 "level" => "success",
-                "message" => "Peternak $request->nama Berhasil diupdate!"
+                "message" => "Data Peternak $request->nama Berhasil diupdate!"
             ]);
         } else {
             $request->validate([
                 'nik' => 'numeric|required'
             ]);
-            DB::table('peternak')->insert([
+            DB::table('biodatauser')->insert([
                 'nik' => $nik,
                 'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
                 'jeniskelamin' => $jk,
                 'iddesa' => $iddesa,
                 'alamat' => $alamat,
                 'telp' => $telp
-//            'idkecamatan'     => $idkecamatan
             ]);
 
             \Session::flash("flash_notification", [
                 "level" => "success",
-                "message" => "Berhasil menambah peternak : $request->nama"
+                "message" => "Berhasil menambah data peternak : $request->nama"
             ]);
         }
 
@@ -158,6 +166,6 @@ class peternakController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('peternak')->where('idpeternak', '=', $id)->delete();
+        DB::table('biodatauser')->where('nik', '=', $id)->delete();
     }
 }

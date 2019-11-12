@@ -18,23 +18,32 @@ class petaniController extends Controller
     {
         return view('dashboard');
     }
-   
 
-    public function tabelpetani (){
-        return DataTables::of(DB::table('petani')
-                ->join('desa', 'petani.iddesa', '=', 'desa.iddesa')
-                ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
-                ->select('petani.*', 'kecamatan.kecamatan as namakecamatan','desa.namadesa as namadesa')
-                ->get())
-                ->addColumn('action', function ($data) {
-                    $del = '<a href="#" data-id="' . $data->idpetani . '" class="hapus-data"><i class="material-icons">delete</i></a>';
-                    $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                    return $edit . '&nbsp' . $del;
-                })
-                ->make(true);
+
+    public function tabelpetani()
+    {
+        return DataTables::of(DB::table('biodatauser')
+            ->join('desa', 'biodatauser.iddesa', '=', 'desa.iddesa')
+            ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+            ->select('biodatauser.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as namadesa')
+            ->get())
+            ->addColumn('action', function ($data) {
+                $del = '<a href="#" data-id="' . $data->nik . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->nik . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
+            })
+            ->make(true);
     }
 
-    
+    public function cekpetani($id)
+    {
+        $x = DB::table('biodatauser')
+            -> join  ('desa','biodatauser.iddesa','=','desa.iddesa')
+            -> join  ('kecamatan','desa.idkecamatan','=','kecamatan.idkecamatan')
+            ->where('nik', $id)
+            ->get();
+        return response()->json($x);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -44,36 +53,74 @@ class petaniController extends Controller
     public function create()
     {
         $desa = DB::table('desa')->get();
-        return view('pertanian.datapetani',compact('desa'));
-               
+        $kecamatan = DB::table('kecamatan')->get();
+        return view('pertanian.datapetani', compact('kecamatan', 'desa'));
     }
-  
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'telp' => 'numeric|required'
+        ]);
         $nama = $request->get('nama');
+        $tl = $request->get('tl');
+        $tgl = $request->get('tgl');
         $alamat = $request->get('alamat');
+        $jk = $request->get('jk');
+        $iddesa = $request->get('iddesa');
         $nik = $request->get('nik');
         $telp = $request->get('telp');
-        $iddesa = $request->get('iddesa');
-        DB::table('petani')->insert([
-            'nik'      => $nik,
-            'nama'      => $nama,
-            'alamat'      => $alamat,
-            'telp'      => $telp,
-            'iddesa'     => $iddesa
-        ]);
+     //   $id = $request->get('id');
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah data : $request->nama"
-        ]);
+        $pengecekan = DB::table('biodatauser')->select('*')
+            ->where('nik', '=', $nik)
+            ->where('nama', '=', $nama);
+
+        if ($pengecekan->exists()) {
+            // DB::table('biodatauser')
+            //     ->where('nik','=',$nik)
+            //     ->update([
+            //     'nama' => $nama,
+            //     'tempatlahir' => $tl,
+            //     'tgllahir' => $tgl,
+            //     'jeniskelamin' => $jk,
+            //     'iddesa' => $iddesa,
+            //     'alamat' => $alamat,
+            //     'telp' => $telp
+
+            // ]);
+            return $request->get('nik');
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data petani $request->nama Berhasil diupdate!"
+            ]);
+        } else {
+            $request->validate([
+          //      'nik' => 'numeric|required'
+            ]);
+            DB::table('biodatauser')->insert([
+                'nik' => $nik,
+                'nama' => $nama,
+                'tempatlahir' => $tl,
+                'tgllahir' => $tgl,
+                'jeniskelamin' => $jk,
+                'iddesa' => $iddesa,
+                'alamat' => $alamat,
+                'telp' => $telp
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Berhasil menambah data petani : $request->nama"
+            ]);
+        }
 
         return redirect('/datapetani/create');
     }
@@ -81,7 +128,7 @@ class petaniController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -92,7 +139,7 @@ class petaniController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -103,8 +150,8 @@ class petaniController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -115,11 +162,11 @@ class petaniController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        DB::table('biodatauser')->where('nik', '=', $id)->delete();
     }
 }

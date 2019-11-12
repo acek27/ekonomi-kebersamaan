@@ -21,17 +21,18 @@ class kelompokpetaniController extends Controller
     }
 
      public function tabelkelompokpetani (){
-        return DataTables::of(DB::table('kelompokpetani')
-                ->join('desa', 'kelompokpetani.iddesa', '=', 'desa.iddesa')
-                ->join('kecamatan', 'desa.idkecamatan', '=', 'kecamatan.idkecamatan')
-                ->select('kelompokpetani.*', 'kecamatan.kecamatan as namakecamatan','desa.namadesa as desa')
-                ->get())
-                ->addColumn('action', function ($data) {
-                    $del = '<a href="#" class="hapus-data"><i class="material-icons">delete</i></a>';
-                    $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                    return $edit . '&nbsp' . $del;
-                })
-                ->make(true);
+        return DataTables::of(DB::table('kelompok')
+        ->join('desa', 'kelompok.iddesa', '=', 'desa.iddesa')
+        ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
+        ->select('kelompok.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
+        ->where('sektor','=','pertanian')
+        ->get())
+        ->addColumn('action', function ($data) {
+            $del = '<a href="#" data-id="' . $data->idkelompok . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+            $edit = '<a href="#" data-id="' . $data->idkelompok . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+            return $edit . '&nbsp' . '&nbsp' . $del;
+        })
+        ->make(true);
     }
 
     /**
@@ -42,9 +43,15 @@ class kelompokpetaniController extends Controller
     public function create()
     {
         $kecamatan = DB::table('kecamatan')->get();
-        $desa = DB::table('desa')->get();
         $jenis = DB::table('jeniskelompoktani')->get();
-        return view('pertanian.kelompokpetani',compact('kecamatan','desa','jenis'));
+        return view('pertanian.kelompokpetani',compact('kecamatan','jenis'));
+    }
+
+    public function datadesa($id)
+    {
+        $data = DB::table('desa')->where('idkecamatan', '=', $id)
+            ->get();
+        return response()->json($data);
     }
 
     /**
@@ -59,23 +66,56 @@ class kelompokpetaniController extends Controller
         $alamat = $request->get('alamat');
         $iddesa = $request->get('iddesa');
         $thn = $request->get('thn');
-        $jenis = $request->get('jeniskelompok');
-        DB::table('kelompokpetani')->insert([
-            'namakelompok'      => $nama,
-            'alamatsekretariat'      => $alamat,
-            'iddesa'      => $iddesa,
-            'tahunpembentukan'      => $thn,
-            'jeniskelompok'      => $jenis
-            
-        ]);
+        $id = $request->get('id');
+        $jeniskelompok = $request->get('jeniskelompok');
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah kelompok : $request->nama"
-        ]);
+        $pengecekan = DB::table('kelompok')->select('*')
+            ->where('idkelompok', '=', $id);
+//            ->where('namakelompok', '=', $nama);
+
+        if ($pengecekan->exists()) {
+            DB::table('kelompok')
+                ->where('idkelompok', '=', $id)
+                ->update([
+                    'namakelompok' => $nama,
+                    'iddesa' => $iddesa,
+                    'alamatsekretariat' => $alamat,
+                    'tahunpembentukan' => $thn,
+                    'jeniskelompok' => $jeniskelompok
+                ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Data Berhasil Diupdate!"
+            ]);
+        } else {
+            DB::table('kelompok')->insert([
+                'namakelompok' => $nama,
+                'iddesa' => $iddesa,
+                'alamatsekretariat' => $alamat,
+                'tahunpembentukan' => $thn,
+                'jeniskelompok' => $jeniskelompok,
+                'sektor' => 'pertanian',
+                'status' => '1'
+            ]);
+
+            \Session::flash("flash_notification", [
+                "level" => "success",
+                "message" => "Berhasil menambah kelompok : $request->nama"
+            ]);
+        }
 
         return redirect('/kelompokpetani/create');
     }
+
+    public function cekkelompokpetani($id)
+    {
+        $x = DB::table('kelompok')
+            ->where('idkelompok', $id)
+            ->get();
+        return response()->json($x);
+    }
+
 
     /**
      * Display the specified resource.
@@ -119,6 +159,6 @@ class kelompokpetaniController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('kelompok')->where('idkelompok', '=', $id)->delete();
     }
 }

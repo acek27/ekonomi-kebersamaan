@@ -82,13 +82,14 @@ class kepemilikanController extends Controller
         if ($pengecekan->exists()) {
             $x = DB::table('peternak')
                 ->join('desa', 'desa.iddesa', '=', 'peternak.iddesa')
-                ->where('nik',$id)->get();
+                ->select('peternak.*', 'desa.namadesa')
+                ->where('nik', $id)->get();
             return response()->json($x);
         } else {
             $array = array();
             $x = DB::table('peternak')
                 ->join('desa', 'desa.iddesa', '=', 'peternak.iddesa')
-                ->select('peternak.*', 'desa.namadesa')
+                ->select('peternak.*',  'desa.namadesa')
                 ->where('nik', $array)->get();
         }
     }

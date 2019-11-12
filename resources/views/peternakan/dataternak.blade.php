@@ -8,7 +8,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Ternak</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                class="fas fa-download fa-sm text-white-50"></i> Buat Laporan</a>
     </div>
     @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
@@ -123,22 +123,26 @@
                         swal("Cancelled", "Data batal dihapus", "error");
                     });
             };
+
             $('body').on('click', '.hapus-data', function () {
                 del($(this).attr('data-id'));
             });
+
             $('body').on("click", '.edit-modal', function () {
                 var idternak = $(this).attr('data-id');
                 $.ajax({
-                    url: "{{url('/cekternak')}}/" + idternak,
+                    // url: "{{url('/cekternak')}}/" + idpeternak,
+                    url: "/dataternak/"+ idternak+"/edit",
                     type: 'GET',
                     datatype: 'json',
                     success: function (x) {
                         $.each(x, function (index, z) {
-                            $('#nama').val(z.jenisternak).prop( "disabled", true );
+                            $('#nama').val(z.jenisternak);
                             $('#id').val(z.idjenis);
                             $('#idkategori').val(z.idkategori);
                             $('#simpan').text("UPDATE");
                         });
+
                     }
                 });
             });

@@ -1,14 +1,14 @@
 @extends('layouts.masterdashboard')
 @section('css')
-    {{--    <link href="{{asset('plugins/bootstrap-datepicker/css/bootstrap-datepicker.css')}}" rel="stylesheet"/>--}}
     <link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}" rel="stylesheet"/>
-@endsection
+    <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+    @endsection
 @section('isi')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Anggota Kelompok Peternak</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                class="fas fa-download fa-sm text-white-50"></i> Buat Laporan</a>
     </div>
     @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
@@ -18,6 +18,16 @@
     @endif
     <form method="POST" action="{{route('keanggotaanpeternak.store')}}" role="form">
         @csrf
+
+  <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR MENJADI ANGGOTA KELOMPOK PETERNAK</h6>
+      </div>
+      <div class="card-body">
         <label style="color:black">NIK</label>
         <input type="text" class="form-control form-control-user" id="nik" name="nik" aria-describedby="emailHelp"
                placeholder="">
@@ -28,7 +38,7 @@
         <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp"
                placeholder="" disabled>
         <label style="color:black">Jenis Ternak Yang Dimiliki</label>
-        <select class="form-control show-tick" name="idjenis">
+        <select class="form-control show-tick" id="idjenis" name="idjenis">
             <option value="">-- Please select --</option>
             @foreach($jenisternak as $values)
                 <option value="{{$values->idjenis}}">{{$values->jenisternak}}</option>
@@ -40,23 +50,28 @@
 
         <br><label style="color:black">LOKASI TERNAK:</label>
         <br>
-        <label style="color:black">Desa</label>
-        <select class="form-control show-tick" name="iddesa">
+        <label style="color:black">Kecamatan</label>
+        <select class="form-control show-tick" id="idkecamatan" name="idkecamatan" required>
             <option value="">-- Please select --</option>
-            @foreach($desa as $values)
-                <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
+            @foreach($kecamatan as $value)
+                <option style="text-transform: lowercase" value="{{$value->idkecamatan}}">{{$value->kecamatan}}</option>
             @endforeach
+        </select>
+        <label style="color:black">Desa</label>
+        <select class="form-control show-tick" id="iddesa" name="iddesa" required>
+            <option value="">-- Please select --</option>
+
         </select>
 
         <label style="color:black">Nama Kelompok</label>
-        <select class="form-control show-tick" name="idkelompok">
+        <select class="form-control show-tick" id="idkelompok" name="idkelompok">
             <option value="">-- Please select --</option>
             @foreach($kelompok as $values)
-                <option value="{{$values->idkelompokternak}}">{{$values->namakelompokternak}}</option>
+                <option value="{{$values->idkelompok}}">{{$values->namakelompok}}</option>
             @endforeach
         </select>
         <label style="color:black">Jabatan</label>
-        <select class="form-control show-tick" name="jabatan">
+        <select class="form-control show-tick" id="jabatan" name="jabatan">
             <option value="anggota">Anggota</option>
             <option value="ketua">Ketua</option>
             <option value="sekretaris">Sekretaris</option>
@@ -73,12 +88,17 @@
         </button>
 
     </form>
+    </div>
+        </div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-keanggotaanpeternakan"></div>
     <br>
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Daftar Keanggotaan Peternak</h6>
         </div>
-        <div class="card-body">
+     <div class="card-body">
             <div class="table-responsive">
                 <table style="text-align: center" id="datapokter"
                        class="table table-bordered table-striped table-hover">
@@ -105,7 +125,7 @@
 
 @push('script')
     <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js')}}"></script>
-    {{--    <script src="{{asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script>--}}
+  <!-- <script src="{{asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}}"></script> -->
     <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('asetsba2/js/demo/datatables-demo.js')}}"></script>
@@ -121,12 +141,12 @@
                     name: 'nik'
                 },
                     {
-                        data: 'namapeternak',
-                        name: 'namapeternak'
+                        data: 'nama',
+                        name: 'nama'
                     },
                     {
-                        data: 'namadesa',
-                        name: 'namadesa'
+                        data: 'alamat',
+                        name: 'alamat'
                     },
                     {
                         data: 'jenisternak',
@@ -137,16 +157,16 @@
                         name: 'jumlah'
                     },
                     {
+                        data:'namadesa',
+                        name: 'namadesa'
+                    },
+                    {
                         data: 'namakelompok',
                         name: 'namakelompok'
                     },
                     {
                         data: 'jabatan',
                         name: 'jabatan'
-                    },
-                    {
-                        data: 'tglbergabung',
-                        name: 'tglbergabung'
                     },
                     {
                         data: 'action',
@@ -197,23 +217,72 @@
                 autoclose: true,
             });
         });
+
+        $(document).ready(function () {
+            $('#idkecamatan').change(function () {
+                var id = $(this).val();
+                $.ajax({
+                    url: "/datadesa/" + id,
+                    method: "POST",
+                    data: {id: id},
+                    async: true,
+                    dataType: 'json',
+                    success: function (data) {
+                        var html = '';
+                        var i;
+                        for (i = 0; i < data.length; i++) {
+                            html += '<option style="text-transform: lowercase;" value=' + data[i].iddesa + '>' + data[i].namadesa + '</option>';
+                        }
+                        $('#iddesa').html(html);
+                    }
+                });
+                return false;
+            });
+
+        });
+
         $('#nik').change(function () {
             var kode = $("#nik").val();
-
             $.ajax({
                 url: "{{url('/ceknik')}}/" + kode,
                 type: 'GET',
                 datatype: 'json',
+                error: function (x, exception) {
+                    swal("Gagal", "Data Tidak Ditemukan", "error");
+                    $('#nama').val("");
+                    $('#alamat').val("");
+                },
                 success: function (x) {
                     $.each(x, function (index, z) {
-                        $('#idpeternak').val(z.idpeternak);
                         $('#nama').val(z.nama);
                         $('#alamat').val(z.alamat);
-                        $('#desa').val(z.namadesa);
-                        $('#kec').val(z.kecamatan);
+
                     });
                 }
             });
         });
+
+        $('body').on("click", '.edit-modal', function () {
+                    var idkeanggotaan = $(this).attr('data-id');
+                    $.ajax({
+                        url: "{{url('/cekkeanggotaanpeternak')}}/" + idkeanggotaan,
+                        type: 'GET',
+                        datatype: 'json',
+                        success: function (x) {
+                            $.each(x, function (index, z) {
+                                $('#nik').val(z.nik).prop("disabled",true);
+                                $('#nama').val(z.nama);
+                                $('#jumlah').val(z.jumlah);
+                                $('#alamat').val(z.alamat);
+                                $('#idjenis').val(z.idjenis);
+                                $('#idkelompok').val(z.idkelompok);
+                                $('#datepicker').val(z.tglbergabung);
+                                $('#jabatan').val(z.jabatan);
+                                $('#simpan').text("UPDATE");
+                            });
+                        }
+                    });
+                });
+
     </script>
 @endpush

@@ -1,7 +1,7 @@
 @extends('layouts.masterdashboard')
 @section('css')
 <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
-<link href="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css')}}" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/css/gijgo.min.css">
 @endsection
 @section('isi')
 
@@ -41,9 +41,9 @@
             @endforeach
           </select>
           <label style="color:black">Hasil Produksi (Kg)</label>
-          <input type="text" class="form-control form-control-user" id="hasil" name="hasil"
+          <input type="text" class="form-control form-control-user" id="hasil" name="hasil" 
           aria-describedby="emailHelp" placeholder="" required>
-          <input type="text" class="form-control form-control-user" id="idkeanggotaan"
+          <input type="text" class="form-control form-control-user" id="idkeanggotaan" 
           name="idkeanggotaan" aria-describedby="emailHelp" value="{{$value->idkeanggotaan}}" hidden>
           <label style="color:black">Tanggal Update</label>
           <input type="text" class="form-control datepicker" id="datepicker" name="tgl"
@@ -92,7 +92,7 @@
 @endsection
 
 @push('script')
-    <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js')}}"></script>
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.13/combined/js/gijgo.min.js"></script>
 <script>
 $(function () {
             $('.datepicker').datepicker({

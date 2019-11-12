@@ -27,10 +27,10 @@ class hasilpertanianController extends Controller
     public function tabelcaritani()
     {
         return DataTables::of(DB::table('keanggotaanpoktan')
-            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
+            ->join('biodatauser', 'keanggotaanpoktan.nik', '=', 'biodatauser.nik')
             ->join('desa', 'desa.iddesa', '=', 'keanggotaanpoktan.iddesa')
-            ->join('kelompokpetani', 'kelompokpetani.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-            ->select('keanggotaanpoktan.*', 'petani.nama as namapetani', 'petani.nik as nik', 'petani.alamat as alamat', 'desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
+            ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+            ->select('keanggotaanpoktan.*', 'biodatauser.nama as namapetani', 'biodatauser.nik as nik', 'biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 // $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -86,9 +86,9 @@ class hasilpertanianController extends Controller
     {
         $jenis = DB::table('jenistanaman')->get();
         $data = DB::table('keanggotaanpoktan')
-            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
+            ->join('biodatauser', 'keanggotaanpoktan.nik', '=', 'biodatauser.nik')
             ->join('desa', 'keanggotaanpoktan.iddesa', '=', 'desa.iddesa')
-            ->join('kelompokpetani', 'keanggotaanpoktan.idkelompok', '=', 'kelompokpetani.idkelompok')
+            ->join('kelompok', 'keanggotaanpoktan.idkelompok', '=', 'kelompok.idkelompok')
             ->where('idkeanggotaan', '=', $id)->get();
         return view('pertanian.hasilpertanian', compact('data', 'jenis'));
 

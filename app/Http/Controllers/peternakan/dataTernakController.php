@@ -32,15 +32,17 @@ class dataTernakController extends Controller
             })
             ->make(true);
     }
-
-
-    public function cekternak($id)
-    {
-        $x = DB::table('jenisternak')
-            ->where('idjenis', $id)
-            ->get();
-        return response()->json($x);
-    }
+// Cara pertama dengan Route resource maka format URLnya : /Alamat/parameter/function (parameter ditengah)
+// Cara kedua tidak menggunakan resource maka format URLnya: "{{url('/cekternak')}}/" + idpeternak, (Route/web.php harus diberi 
+//  route::get('cekternak/{id}','peternakan\dataTernakController@cekternak')
+ // funcion dibawah ini  bisa dipakai.
+    // public function cekternak($id)
+    // {
+    //      $x = DB::table('jenisternak')
+    //         ->where('idjenis', '=', $id)
+    //         ->get();
+    //     return response()->json($x);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -114,8 +116,11 @@ class dataTernakController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {    
+        $x = DB::table('jenisternak')
+        ->where('idjenis', '=', $id)
+        ->get();
+    return response()->json($x);
     }
 
     /**

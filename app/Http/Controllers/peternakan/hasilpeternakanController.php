@@ -26,11 +26,11 @@ class hasilpeternakanController extends Controller
      */
     public function tabelcaripeternak()
     {
-        return DataTables::of(DB::table('keanggotaanpeternak')
-            ->join('peternak', 'keanggotaanpeternak.idpeternak', '=', 'peternak.idpeternak')
-            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpeternak.iddesa')
-            ->join('kelompokternak', 'kelompokternak.idkelompokternak', '=', 'keanggotaanpeternak.idkelompokternak')
-            ->select('keanggotaanpeternak.*', 'peternak.nama as namapeternak', 'peternak.nik as nik', 'peternak.alamat as alamat', 'desa.namadesa as namadesa', 'kelompokternak.namakelompokternak as namakelompok')
+        return DataTables::of(DB::table('keanggotaanpokter')
+            ->join('biodatauser', 'keanggotaanpokter.nik', '=', 'biodatauser.nik')
+            ->join('desa', 'desa.iddesa', '=', 'keanggotaanpokter.iddesa')
+            ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpokter.idkelompok')
+            ->select('keanggotaanpokter.*', 'biodatauser.nama as nama', 'biodatauser.nik as nik', 'biodatauser.alamat as alamat', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
                 // $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
@@ -45,6 +45,7 @@ class hasilpeternakanController extends Controller
 
         return view('peternakan.hasilpeternakan');
     }
+
     public function cari()
     {
         return view('peternakan.caripeternak');
@@ -53,18 +54,20 @@ class hasilpeternakanController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $id = $request->get('idkeanggotaan');
         $idjenis = $request->get('idjenis');
-        $jumlah = $request->get('hasil');
+        $jumlah = $request->get('jumlah');
+        $tgl = $request->get('tgl');
         DB::table('hasilternak')->insert([
-            'idkeanggotaan'      => $id,
-            'idjenis'      => $idjenis,
-            'jumlah'     => $jumlah
+            'idkeanggotaan' => $id,
+            'id_produk' => $idjenis,
+            'jumlah' => $jumlah,
+            'tglupdate' => $tgl,
         ]);
 
         \Session::flash("flash_notification", [
@@ -72,37 +75,53 @@ class hasilpeternakanController extends Controller
             "message" => "Berhasil menambah data : $request->nama"
         ]);
 
-        return redirect('/hasilpeternakan'.'/'.$id);
+        return redirect('/hasilpeternakan' . '/' . $id);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $jenis = DB::table('jenisternak')->get();
-        $data = DB::table('keanggotaanpeternak')
-            ->join('peternak', 'keanggotaanpeternak.idpeternak', '=', 'peternak.idpeternak')
-            ->join('jenisternak', 'keanggotaanpeternak.idjenis', '=', 'jenisternak.idjenis')
-            ->join('desa', 'keanggotaanpeternak.iddesa', '=', 'desa.iddesa')
-            ->join('kelompokternak', 'keanggotaanpeternak.idkelompokternak', '=', 'kelompokternak.idkelompokternak')
+        $produk = DB::table('produkpeternakan')->get();
+        $data = DB::table('keanggotaanpokter')
+            ->join('biodatauser', 'keanggotaanpokter.nik', '=', 'biodatauser.nik')
+            ->join('jenisternak', 'keanggotaanpokter.idjenis', '=', 'jenisternak.idjenis')
+            ->join('desa', 'keanggotaanpokter.iddesa', '=', 'desa.iddesa')
+            ->join('kelompok', 'keanggotaanpokter.idkelompok', '=', 'kelompok.idkelompok')
             ->where('idkeanggotaan', '=', $id)->get();
-        return view('peternakan.hasilpeternakan', compact('data', 'jenis'));
+        $no = $id;
+        return view('peternakan.hasilpeternakan', compact('data', 'jenis', 'produk', 'no'));
 
+    }
 
-        // print_r($data);
+    public function cekhasil($id, $no)
+    {
+        $pengecekan = DB::table('hasilternak')->where('id_produk', $id)
+            ->where('idkeanggotaan', $no);
+        if ($pengecekan->exists()) {
+            $x = DB::table('hasilternak')->select(DB::raw('SUM(jumlah)as total'))->where('id_produk', $id)
+                ->where('idkeanggotaan', $no)
+                ->get();
+            return response()->json($x);
+        } else {
+            $x = DB::table('hasilternak')->select('0 as jumlah')->get();
+            return response()->json($x);
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
         //
     }
@@ -110,35 +129,24 @@ class hasilpeternakanController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
-        $idjenis = $request->get('idjenis');
-        $jumlah = $request->get('hasil');
-        DB::table('hasilternak')->insert([
-            'idkeanggotaan'      => $id,
-            'idjenis'      => $idjenis,
-            'jumlah'     => $jumlah
-        ]);
 
-        \Session::flash("flash_notification", [
-            "level" => "success",
-            "message" => "Berhasil menambah data : $request->nama"
-        ]);
-        return $id;
-        // return redirect('/hasilpeternakan/create');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         //
     }

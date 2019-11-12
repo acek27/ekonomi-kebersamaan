@@ -7,7 +7,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Kelompok Peternak</h1>
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                class="fas fa-download fa-sm text-white-50"></i> Buat Laporan</a>
     </div>
     @if (session()->has('flash_notification.message'))
         <div class="alert alert-{{ session()->get('flash_notification.level') }}">
@@ -17,6 +17,15 @@
     @endif
     <form method="POST" action="{{route('kelompokpeternak.store')}}" role="form">
         @csrf
+        <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KELOMPOK PETERNAK</h6>
+      </div>
+      <div class="card-body">
         <label style="color:black">Nama Kelompok</label>
         <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp"
                placeholder="" required>
@@ -48,10 +57,14 @@
         <button type="submit" id="simpan" class="btn-sm btn-primary shadow-sm">
             SIMPAN
         </button>
-    </form>
-    @csrf
-    <br>
-    <div class="card shadow mb-4">
+        </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-kelompokpeternakan"></div>
+        @csrf
+        <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Data Kelompok Peternak</h6>
         </div>
@@ -65,7 +78,7 @@
                         <th>Alamat</th>
                         <th>Desa</th>
                         <th>Kecamatan</th>
-                        <th>Tahun Pembentukan</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -89,12 +102,12 @@
                     serverSide: true,
                     ajax: '{{route('tabel.kelompokpeternak')}}',
                     columns: [{
-                        data: 'idkelompokternak',
-                        name: 'idkelompokternak'
+                        data: 'idkelompok',
+                        name: 'idkelompok'
                     },
                         {
-                            data: 'namakelompokternak',
-                            name: 'namakelompokternak'
+                            data: 'namakelompok',
+                            name: 'namakelompok'
                         },
                         {
                             data: 'alamatsekretariat',
@@ -109,8 +122,8 @@
                             name: 'namakecamatan'
                         },
                         {
-                            data: 'tahunpembentukan',
-                            name: 'tahunpembentukan'
+                            data: 'status',
+                            name: 'status'
                         },
                         {
                             data: 'action',
@@ -162,8 +175,8 @@
                         datatype: 'json',
                         success: function (x) {
                             $.each(x, function (index, z) {
-                                $('#nama').val(z.namakelompokternak);
-                                $('#id').val(z.idkelompokternak);
+                                $('#nama').val(z.namakelompok);
+                                $('#id').val(z.idkelompok);
                                 $('#alamat').val(z.alamatsekretariat);
                                 $('#desa').val(z.iddesa);
                                 $('#thn').val(z.tahunpembentukan);

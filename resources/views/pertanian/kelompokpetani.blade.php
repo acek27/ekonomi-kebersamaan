@@ -16,22 +16,31 @@
     @endif
 <form method="POST" action="{{route('kelompokpetani.store')}}" role="form">
     @csrf
+    <div class="row">
+  <!-- Content Column Ke 1-->
+  <div class="col-lg-6 mb-4">
+    <!-- Project Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DAFTAR KEOMPOK TANI</h6>
+      </div>
+      <div class="card-body">
     <label style="color:black">Nama Kelompok</label>
     <input type="text" class="form-control form-control-user" id="nama" name="nama" aria-describedby="emailHelp" placeholder="" required>
     <label style="color:black">Alamat Sekretariat</label>
     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" aria-describedby="emailHelp" placeholder="" required>
-    <label style="color:black">Desa</label>
-    <select class="form-control show-tick" name="iddesa" required>
-        <option value="">-- Please select --</option>
-        @foreach($desa as $values)
-        <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
-        @endforeach
-    </select>
     <label style="color:black">Kecamatan</label>
     <select class="form-control show-tick" name="idkecamatan" required>
         <option value="">-- Please select --</option>
         @foreach($kecamatan as $values)
         <option value="{{$values->idkecamatan}}">{{$values->kecamatan}}</option>
+        @endforeach
+    </select>
+    <label style="color:black">Desa</label>
+    <select class="form-control show-tick" name="iddesa" required>
+        <option value="">-- Please select --</option>
+        @foreach($desa as $values)
+        <option value="{{$values->iddesa}}">{{$values->namadesa}}</option>
         @endforeach
     </select>
     <label style="color:black">Tahun Pembentukan</label>
@@ -48,6 +57,11 @@
         SIMPAN</button>
 
 </form>
+</div>
+        </div>
+        </div>
+        <div class="col-lg-6 d-none d-lg-block bg-pertanian"></div>
+</div>
 @csrf
 <br>
 <div class="card shadow mb-4">

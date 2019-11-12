@@ -25,18 +25,23 @@ Route::get('cekternak/{id}', 'peternakan\dataTernakController@cekternak');
 
 Route::resource('datapeternak', 'peternakan\peternakController');
 Route::get('tabelpeternak', 'peternakan\peternakController@tabelpeternak')->name('tabel.peternak');
+Route::get('cekpeternak/{id}', 'peternakan\peternakController@cekpeternak');
 
 Route::resource('kelompokpeternak', 'peternakan\kelompokpeternakController');
 Route::get('tabelkelompokpeternak', 'peternakan\kelompokpeternakController@tabelkelompokpeternak')->name('tabel.kelompokpeternak');
+Route::get('cekkelompokpeternak/{id}', 'peternakan\kelompokpeternakController@cekkelompokpeternak');
 
 Route::resource('keanggotaanpeternak', 'peternakan\keanggotaanController');
 Route::get('tabelkeanggotaanpeternak', 'peternakan\keanggotaanController@tabelpokter')->name('tabel.pokter');
+Route::get('ceknik/{id}', 'peternakan\keanggotaanController@ceknik');
+Route::get('cekkeanggotaanpeternak/{id}', 'peternakan\keanggotaanController@cekkeanggotaanpeternak');
 
-Route::resource('kepemilikan', 'peternakan\kepemilikanController');
-Route::get('tabelkepemilikan', 'peternakan\kepemilikanController@tabelkepemilikan')->name('tabel.kepemilikan');
-Route::get('ceknik/{id}', 'peternakan\kepemilikanController@ceknik');
+Route::get('cekhasil/{id}/{no}', 'peternakan\hasilpeternakanController@cekhasil');
+// Route::resource('kepemilikan', 'peternakan\kepemilikanController');
+// Route::get('tabelkepemilikan', 'peternakan\kepemilikanController@tabelkepemilikan')->name('tabel.kepemilikan');
+// Route::get('ceknik/{id}', 'peternakan\kepemilikanController@ceknik');
 
-//Route::resource('kotoranternak', 'peternakan\kotoraternakController');
+// Route::resource('kotoranternak', 'peternakan\kotoraternakController');
 Route::resource('hasilpeternakan', 'peternakan\hasilpeternakanController');
 Route::get('tabelhasil', 'peternakan\hasilpeternakanController@tabelhasil')->name('tabel.hasil');
 Route::get('tabelhasilpeternakan', 'peternakan\hasilpeternakanController@tabelcaripeternak')->name('tabel.caripeternak');
@@ -48,17 +53,21 @@ Route::get('caripeternak', 'peternakan\hasilpeternakanController@cari')->name('h
 Route::post('/dataProvinsi/{id}', 'dataPengunjungController@dataProvinsi')->name('data.provinsi');
 Route::resource('datatanaman', 'pertanian\datatanamanController');
 Route::get('tabeltanaman', 'pertanian\datatanamanController@tabeltanaman')->name('tabel.tanaman');
+Route::get('cektanaman/{id}', 'pertanian\datatanamanController@cektanaman');
 
 Route::resource('datapetani', 'pertanian\petaniController');
 Route::get('tabelpetani', 'pertanian\petaniController@tabelpetani')->name('tabel.petani');
+Route::get('cekpetani/{id}', 'pertanian\petaniController@cekpetani');
 // Route::post('getdesa/{id}', 'pertanian\petaniController@getdesa')->name('getdesa');
 
 Route::resource('kelompokpetani', 'pertanian\kelompokpetaniController');
 Route::get('tabelkelompokpetani', 'pertanian\kelompokpetaniController@tabelkelompokpetani')->name('tabel.kelompokpetani');
+Route::get('cekkelompokpetani/{id}', 'pertanian\kelompokpetaniController@cekkelompokpetani');
 
 Route::resource('keanggotaanpetani', 'pertanian\keanggotaantaniController');
 Route::get('tabelkeanggotaan', 'pertanian\keanggotaantaniController@tabelpoktan')->name('tabel.poktan');
 Route::get('cekniktani/{id}', 'pertanian\keanggotaantaniController@cekniktani');
+Route::get('cekkeanggotaanpetani/{id}', 'pertanian\keanggotaantaniController@cekkeanggotaanpetani');
 
 Route::resource('hasilpertanian', 'pertanian\hasilpertanianController');
 Route::get('tabelhasil', 'pertanian\hasilpertanianController@tabelhasil')->name('tabel.hasil');

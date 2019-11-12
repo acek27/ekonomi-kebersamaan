@@ -22,16 +22,18 @@ class keanggotaantaniController extends Controller
     public function tabelpoktan()
     {
         return DataTables::of(DB::table('keanggotaanpoktan')
-            ->join('petani', 'keanggotaanpoktan.idpetani', '=', 'petani.idpetani')
+            ->join('biodatauser', 'keanggotaanpoktan.nik', '=', 'biodatauser.nik')
             ->join('desa', 'desa.iddesa', '=', 'keanggotaanpoktan.iddesa')
-            ->join('kelompokpetani', 'kelompokpetani.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
-            ->select('keanggotaanpoktan.*','petani.nama as namapetani','petani.nik as nik', 'petani.alamat as alamat','desa.namadesa as namadesa', 'kelompokpetani.namakelompok as namakelompok')
+            ->join('jenislahan', 'jenislahan.idjenis', '=', 'keanggotaanpoktan.idjenis')
+            ->join('kelompok', 'kelompok.idkelompok', '=', 'keanggotaanpoktan.idkelompok')
+            ->where('sektor','=','pertanian')
+            ->select('keanggotaanpoktan.*','biodatauser.nama as nama','biodatauser.nik as nik','biodatauser.alamat as alamat', 'jenislahan.jenislahan as jenislahan', 'desa.namadesa as namadesa', 'kelompok.namakelompok as namakelompok')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="" class="hapus-data"><i class="material-icons">delete</i></a>';
-                $edit = '<a href="#"><i class="material-icons">edit</i></a>';
-                return $edit . '&nbsp' . $del;
-            }) 
+                $del = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idkeanggotaan . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                return $edit . '&nbsp' . '&nbsp' . $del;
+            })
             ->make(true);
     }
 
@@ -58,11 +60,24 @@ class keanggotaantaniController extends Controller
     public function create()
     {
         
-        $desa = DB::table('desa')->get();
         $kecamatan = DB::table('kecamatan')->get();
-        $kelompok = DB::table('kelompokpetani')->get();
+        $jenislahan = DB::table('jenislahan')->get();
+        $kelompok = DB::table('kelompok')
+        ->where('sektor','=','pertanian')
+        ->get();
         $date = date('d-m-Y');
-        return view('pertanian.keanggotaanpetani',compact('date','kelompok','desa','kecamatan'));
+        return view('pertanian.keanggotaanpetani',compact('date','kelompok','kecamatan','jenislahan'));
+    }
+
+    public function cekkeanggotaanpetani($id)
+    {
+        $x = DB::table('keanggotaanpoktan')
+            ->join('biodatauser','biodatauser.nik','=','keanggotaanpoktan.nik')
+            ->join('jenislahan','jenislahan.idjenis','=','keanggotaanpoktan.idjenis')
+            ->join('kelompok','kelompok.idkelompok','=','keanggotaanpoktan.idkelompok')
+            ->where('idkeanggotaan', $id)
+            ->get();
+        return response()->json($x);
     }
 
     /**
@@ -74,14 +89,16 @@ class keanggotaantaniController extends Controller
     public function store(Request $request)
     {
 
-        $idpetani = $request->get('idpetani');
-        $luas = $request->get('lahan');
+        $nik = $request->get('nik');
+        $idjenis = $request->get('idjenis');
+        $luas = $request->get('luas');
         $iddesa = $request->get('iddesa');
         $idkelompok = $request->get('idkelompok');
         $jabatan = $request->get('jabatan');
         $tgl = date('Y-m-d');
         DB::table('keanggotaanpoktan')->insert([
-            'idpetani'      => $idpetani,
+            'nik'      => $nik,
+            'idjenis'      => $idjenis,
             'luaslahan'     => $luas,
             'iddesa'        => $iddesa,
             'idkelompok'    =>$idkelompok,
@@ -138,6 +155,6 @@ class keanggotaantaniController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('keanggotaanpoktan')->where('idkeanggotaan', '=', $id)->delete();
     }
 }

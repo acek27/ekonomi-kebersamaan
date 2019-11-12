@@ -22,14 +22,15 @@ class kelompokpeternakController extends Controller
 
     public function tabelkelompokpeternak()
     {
-        return DataTables::of(DB::table('kelompokternak')
-            ->join('desa', 'kelompokternak.iddesa', '=', 'desa.iddesa')
+        return DataTables::of(DB::table('kelompok')
+            ->join('desa', 'kelompok.iddesa', '=', 'desa.iddesa')
             ->join('kecamatan', 'kecamatan.idkecamatan', '=', 'desa.idkecamatan')
-            ->select('kelompokternak.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
+            ->select('kelompok.*', 'kecamatan.kecamatan as namakecamatan', 'desa.namadesa as desa')
+            ->where('sektor','=','peternakan')
             ->get())
             ->addColumn('action', function ($data) {
-                $del = '<a href="#" data-id="' . $data->idkelompokternak . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
-                $edit = '<a href="#" data-id="' . $data->idkelompokternak . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
+                $del = '<a href="#" data-id="' . $data->idkelompok . '" class="hapus-data"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="#" data-id="' . $data->idkelompok . '" class="edit-modal"><i class="fas fa-edit"></i></a>';
                 return $edit . '&nbsp' . '&nbsp' . $del;
             })
             ->make(true);
@@ -65,18 +66,17 @@ class kelompokpeternakController extends Controller
         $alamat = $request->get('alamat');
         $iddesa = $request->get('iddesa');
         $thn = $request->get('thn');
-        $idkecamatan = $request->get('idkecamatan');
         $id = $request->get('id');
 
-        $pengecekan = DB::table('kelompokternak')->select('*')
-            ->where('idkelompokternak', '=', $id)
-            ->where('namakelompokternak', '=', $nama);
+        $pengecekan = DB::table('kelompok')->select('*')
+            ->where('idkelompok', '=', $id);
+       //     ->where('namakelompok', '=', $nama);
 
         if ($pengecekan->exists()) {
-            DB::table('kelompokternak')
-                ->where('idkelompokternak', '=', $id)
+            DB::table('kelompok')
+                ->where('idkelompok', '=', $id)
                 ->update([
-                    'namakelompokternak' => $nama,
+                    'namakelompok' => $nama,
                     'iddesa' => $iddesa,
                     'alamatsekretariat' => $alamat,
                     'tahunpembentukan' => $thn
@@ -87,11 +87,13 @@ class kelompokpeternakController extends Controller
                 "message" => "Data Berhasil Diupdate!"
             ]);
         } else {
-            DB::table('kelompokternak')->insert([
-                'namakelompokternak' => $nama,
+            DB::table('kelompok')->insert([
+                'namakelompok' => $nama,
                 'iddesa' => $iddesa,
                 'alamatsekretariat' => $alamat,
-                'tahunpembentukan' => $thn
+                'tahunpembentukan' => $thn,
+                'sektor' => 'peternakan',
+                'status' => '1'
             ]);
 
             \Session::flash("flash_notification", [
@@ -105,8 +107,8 @@ class kelompokpeternakController extends Controller
 
     public function cekkelompokpeternak($id)
     {
-        $x = DB::table('kelompokternak')
-            ->where('idkelompokternak', $id)
+        $x = DB::table('kelompok')
+            ->where('idkelompok', $id)
             ->get();
         return response()->json($x);
     }
@@ -153,6 +155,6 @@ class kelompokpeternakController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('kelompokternak')->where('idkelompokternak', '=', $id)->delete();
+        DB::table('kelompok')->where('idkelompok', '=', $id)->delete();
     }
 }

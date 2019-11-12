@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
-    <title>Dasboard KOBESSA</title>
+    <title>Dasboard SIPP</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('asetsba2/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -38,7 +38,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">KOBESSA <sup>1.0</sup></div>
+            <div class="sidebar-brand-text mx-3">SIPP Admin <sup>2</sup></div>
         </a>
 
         <!-- Divider -->
@@ -68,7 +68,7 @@
                 </a>
                 <div id="collapsePeternakan" class="collapse" aria-labelledby="headingPeternakan"
                      data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="{{route('dataternak.create')}}">Data Hewan Ternak</a>
                         <a class="collapse-item active" href="{{route('datapeternak.create')}}">Data Peternak</a>
@@ -76,9 +76,7 @@
                             Peternak</a>
                         <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
                             Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('kepemilikan.create')}}">Data Kepemilikan
-                            Ternak</a>
-                        <a class="collapse-item active" href="{{route('kotoranternak.index')}}">Data Kotoran Ternak</a>
+                        <a class="collapse-item active" href="{{route('hasilpeternakan.cari')}}">Data Hasil Ternak</a>
                     </div>
                 </div>
             </li>
@@ -92,18 +90,17 @@
                         </a>
                         <div id="collapsePertanian" class="collapse" aria-labelledby="headingPertanian"
                              data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Menu:</h6>
-                                <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman
-                                    Pertanian</a>
-                                <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
-                                <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok
-                                    Petani</a>
-                                <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
-                                    Keanggotaan</a>
-{{--                                <a class="collapse-item active" href="utilities-other.html">Data Kepemilikan Lahan</a>--}}
-                                <a class="collapse-item active" href="utilities-other.html">Data Kebutuhan</a>
-                            </div>
+                             <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Menu:</h6>
+                        <a class="collapse-item active" href="{{route('datatanaman.create')}}">Data Tanaman
+                            Pertanian</a>
+                        <a class="collapse-item active" href="{{route('datapetani.create')}}">Data Petani</a>
+                        <a class="collapse-item active" href="{{route('kelompokpetani.create')}}">Data Kelompok
+                            Petani</a>
+                        <a class="collapse-item active" href="{{route('keanggotaanpetani.create')}}">Data
+                            Keanggotaan</a>
+                        <a class="collapse-item active" href="{{route('hasilpertanian.cari')}}">Data Hasil Pertanian</a>
+                    </div>
                         </div>
             </li>
     @endcan
@@ -145,8 +142,8 @@
                             Peternak</a>
                         <a class="collapse-item active" href="{{route('keanggotaanpeternak.create')}}">Data
                             Keanggotaan</a>
-                        <a class="collapse-item active" href="{{route('hasilpeternakan.cari')}}">Data Hasil Peternakan</a>
-                     </div>
+                        <a class="collapse-item active" href="{{route('hasilpeternakan.cari')}}">Data Hasil Ternak</a>
+                    </div>
                 </div>
             </li>
 
@@ -283,7 +280,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="small text-gray-500">November 1, 2019</div>
+                                    <div class="small text-gray-500">December 12, 2019</div>
                                     <span class="font-weight-bold">A new monthly report is ready to download!</span>
                                 </div>
                             </a>
@@ -294,7 +291,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="small text-gray-500">Oktober 28, 2019</div>
+                                    <div class="small text-gray-500">December 7, 2019</div>
                                     $290.29 has been deposited into your account!
                                 </div>
                             </a>
@@ -305,7 +302,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div class="small text-gray-500">November 3, 2019</div>
+                                    <div class="small text-gray-500">December 2, 2019</div>
                                     Spending Alert: We've noticed unusually high spending for your account.
                                 </div>
                             </a>
@@ -389,7 +386,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
                             <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                         </a>
                         <!-- Dropdown - User Information -->
