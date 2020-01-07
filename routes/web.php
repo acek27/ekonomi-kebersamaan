@@ -47,7 +47,7 @@ Route::get('tabelhasil', 'peternakan\hasilpeternakanController@tabelhasil')->nam
 Route::get('tabelhasilpeternakan', 'peternakan\hasilpeternakanController@tabelcaripeternak')->name('tabel.caripeternak');
 Route::get('caripeternak', 'peternakan\hasilpeternakanController@cari')->name('hasilpeternakan.cari');
 
-
+Route::get('cetak','HomeController@cetak')->name('cetak');
 
 /* Pertanian */
 Route::post('/dataProvinsi/{id}', 'dataPengunjungController@dataProvinsi')->name('data.provinsi');

@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Support\Facades\DB;
-
 class HomeController extends Controller
 {
     /**
@@ -28,12 +25,5 @@ class HomeController extends Controller
     {
 
         return redirect('/dashboard');
-    }
-
-    public function cetak ()
-    {
-        $data =   DB::table('keanggotaanpoktan')->get();
-        $pdf = PDF::loadView('myPDF', compact('data'))->setPaper('folio', 'potrait');
-        return $pdf->stream('MoU Kobessa');
     }
 }

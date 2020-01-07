@@ -79,16 +79,16 @@
                 <span href="{{route('login')}}" class="mr-2 d-none d-lg-inline text-gray-600 small">Login</span>
 
               </a>
-             
+
             </li>
-           
+
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Register</span>
-               
+
               </a>
             </li>
 
@@ -136,7 +136,7 @@
                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Details</div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-clipboard-list fa-2x text-black-300"></i>
+                      <a href="{{route('cetak')}}"><i class="fas fa-clipboard-list fa-2x text-black-300"></i></a>
                      </div>
                   </div>
                 </div>
@@ -199,7 +199,7 @@
                       <div class="text-white-50 small"> 716 Kelompok</div>
                     </div>
                   </div>
-                
+
             </div>
             <!-- Earnings (Monthly) Card Example -->
             <!-- <div class="col-xl-3 col-md-6 mb-4">
@@ -242,13 +242,13 @@
                   </div>
                 </div>
               </div>
-            </div> --> 
+            </div> -->
           </div>
 
           <!-- Content Row -->
           <div class="row">
 
-            
+
 
             <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
@@ -326,21 +326,21 @@
                 </div>
               </div>
 
-              
+
 
             </div>
 
           </div>
 
-          
+
           <!-- Content Row -->
 
           <div class="row">
 
-           
+
             <!-- Pie Chart -->
             <div class="col-xl-4 col-lg-5">
-             
+
             </div>
           </div>
 
